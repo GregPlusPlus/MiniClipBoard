@@ -1,0 +1,53 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file alias="ic_content_paste_white_18dp">rc/icons/ic_content_paste_white_18dp.png</file>
+        <file alias="ic_color_lens_white_24dp">rc/icons/ic_color_lens_white_24dp.png</file>
+        <file alias="ic_photo_white_24dp">rc/icons/ic_photo_white_24dp.png</file>
+        <file alias="ic_text_fields_white_24dp">rc/icons/ic_text_fields_white_24dp.png</file>
+        <file alias="ic_link_white_24dp">rc/icons/ic_link_white_24dp.png</file>
+        <file alias="ic_text_format_white_24dp">rc/icons/ic_text_format_white_24dp.png</file>
+        <file alias="ic_bookmark_border_white_18dp">rc/icons/ic_bookmark_border_white_18dp.png</file>
+        <file alias="ic_bookmark_white_18dp">rc/icons/ic_bookmark_white_18dp.png</file>
+        <file alias="ic_insert_drive_file_white_24dp">rc/icons/ic_insert_drive_file_white_24dp.png</file>
+        <file alias="ic_remove_circle_white_18dp">rc/icons/ic_remove_circle_white_18dp.png</file>
+        <file alias="ic_content_copy_white_18dp">rc/icons/ic_content_copy_white_18dp.png</file>
+        <file alias="ic_exit_to_app_white_18dp">rc/icons/ic_exit_to_app_white_18dp.png</file>
+        <file alias="ic_clear_white_18dp">rc/icons/ic_clear_white_18dp.png</file>
+        <file alias="ic_pause_circle_outline_white_18dp">rc/icons/ic_pause_circle_outline_white_18dp.png</file>
+        <file alias="ic_pause_circle_filled_white_18dp">rc/icons/ic_pause_circle_filled_white_18dp.png</file>
+        <file alias="ic_content_paste_white_24dp">rc/icons/ic_content_paste_white_24dp.png</file>
+        <file alias="ic_favorite_border_white_24dp">rc/icons/ic_favorite_border_white_24dp.png</file>
+        <file alias="arrow_next_big_left">rc/icons/arrow_next_big_left.png</file>
+        <file alias="arrow_next_big_right">rc/icons/arrow_next_big_right.png</file>
+        <file alias="ic_crop_free_white_18dp">rc/icons/ic_crop_free_white_18dp.png</file>
+        <file alias="ic_content_paste_white_18dp_mask">rc/icons/ic_content_paste_white_18dp_mask.png</file>
+        <file alias="ic_remove_circle_outline_white_18dp">rc/icons/ic_remove_circle_outline_white_18dp.png</file>
+        <file alias="ic_help_outline_white_18dp">rc/icons/ic_help_outline_white_18dp.png</file>
+        <file alias="ic_info_white_18dp">rc/icons/ic_info_white_18dp.png</file>
+        <file alias="ic_save_white_18dp">rc/icons/ic_save_white_18dp.png</file>
+        <file alias="skip">rc/icons/skip.png</file>
+        <file alias="ic_more_vert_white_18dp">rc/icons/ic_more_vert_white_18dp.png</file>
+    </qresource>
+    <qresource prefix="/css">
+        <file alias="app">rc/css/app.qss</file>
+    </qresource>
+    <qresource prefix="/ui-images">
+        <file alias="checkbox_checked">rc/UI-Images/checkbox_checked.png</file>
+        <file alias="dropdown_arrow">rc/UI-Images/dropdown_arrow.png</file>
+        <file alias="scroll_bottom">rc/UI-Images/scroll_bottom.png</file>
+        <file alias="scroll_left">rc/UI-Images/scroll_left.png</file>
+        <file alias="scroll_right">rc/UI-Images/scroll_right.png</file>
+        <file alias="scroll_top">rc/UI-Images/scroll_top.png</file>
+        <file alias="size_grip">rc/UI-Images/size_grip.png</file>
+        <file alias="exclusive_unchecked">rc/UI-Images/exclusive_unchecked.png</file>
+        <file alias="exclusive_checked">rc/UI-Images/exclusive_checked.png</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file alias="ic_content_paste_white_48dp">rc/images/ic_content_paste_white_48dp.png</file>
+        <file alias="ic_content_paste_white_48dp_2x">rc/images/ic_content_paste_white_48dp_2x.png</file>
+        <file alias="app_icon">rc/images/app_icon.png</file>
+    </qresource>
+    <qresource prefix="/html">
+        <file alias="welcome">rc/html/welcome.html</file>
+    </qresource>
+</RCC>
