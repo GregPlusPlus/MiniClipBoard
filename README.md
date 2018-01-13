@@ -1,4 +1,4 @@
-![alt text](https://github.com/GregPlusPlus/MiniClipBoard/raw/master/Git/app_icon.png)
+![alt text](https://github.com/GregPlusPlus/MiniClipBoard/raw/master/Git/app_icon_small.png)
 # MiniClipBoard
 *A free clipboard manager available under the GNU Lesser General Public License v3*
 ***
