@@ -43,6 +43,7 @@ public:
     explicit WelcomeScreen(QWidget *parent = nullptr);
 
 signals:
+    void deleted();
 
 public slots:
     void fadeOut();

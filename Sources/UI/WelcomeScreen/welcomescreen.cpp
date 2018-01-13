@@ -68,6 +68,7 @@ void WelcomeScreen::fadeOut()
     animation->setEndValue(QPoint(width(), y()));
     animation->setEasingCurve(QEasingCurve::InBack);
     connect(animation, &QPropertyAnimation::finished, [=](){
+        emit deleted();
         deleteLater();
     });
     animation->start();

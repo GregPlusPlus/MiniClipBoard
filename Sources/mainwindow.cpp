@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
     m_settingsManager = nullptr;
 
     setWindowIcon(QIcon(":/images/ic_content_paste_white_48dp"));
-    setTrayIcon(QIcon(":/icons/ic_content_paste_white_18dp"));
+    setTrayIcon(QIcon(":/images/ic_content_paste_white_48dp_2x"));
     setIconMask(QBitmap(":/icons/ic_content_paste_white_18dp_mask"));
     setAcceptDrops(true);
 
@@ -231,6 +231,9 @@ void MainWindow::seeContent(DataWidget *widget)
 void MainWindow::showWelcomeScreen()
 {
     mw_welcome = new WelcomeScreen(centralWidget());
+    connect(mw_welcome, &WelcomeScreen::deleted, [=]() {
+        mw_welcome = nullptr;
+    });
     mw_welcome->show();
     if(!isVisible()) {
         toggleWindow();
