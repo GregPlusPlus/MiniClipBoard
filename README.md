@@ -14,4 +14,4 @@ MiniClipBoard also features bookmarks that allows you to save your data over tim
 ###### Nb: Windows Installer allows MiniClipBoard to start when the system boots
 
 ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
-Inline-style:
+# Inline-style:
