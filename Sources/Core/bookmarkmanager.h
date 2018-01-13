@@ -36,6 +36,8 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "core.h"
 
+#include <QMessageBox>
+
 class BookmarkManager
 {
 public:

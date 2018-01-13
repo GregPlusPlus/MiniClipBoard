@@ -44,6 +44,8 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDebug>
 
+#include <QMessageBox>
+
 #include "Core/core.h"
 #include "Core/bookmarkmanager.h"
 #include "Core/settingsmanager.h"

@@ -46,7 +46,7 @@ QString SettingsManager::filename() const
 
 void SettingsManager::setFilename(const QString &filename)
 {
-    m_filename = filename;
+    m_filename = QDir::currentPath() + filename;
 }
 
 QString SettingsManager::lang()

@@ -27,6 +27,7 @@ BookmarkManager::BookmarkManager()
 bool BookmarkManager::saveDataToFile(const QByteArray &data, const QUuid &uuid)
 {
     QString path = QString("%1/%2").arg(m_dir.absolutePath()).arg(uuid.toString());
+
     QFile file(path);
     if(!file.open(QIODevice::WriteOnly)) {
         return false;
@@ -40,6 +41,7 @@ bool BookmarkManager::saveDataToFile(const QByteArray &data, const QUuid &uuid)
 QByteArray BookmarkManager::getDataFromFile(const QUuid &uuid)
 {
     QString path = QString("%1/%2").arg(m_dir.absolutePath()).arg(uuid.toString());
+
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly)) {
         return QByteArray();

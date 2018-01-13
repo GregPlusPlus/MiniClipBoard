@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
         dialog->exec();
     });
 
-    m_bookmarkManager.setDir(QDir("./bookmarks"));
+    m_bookmarkManager.setDir(QDir("bookmarks"));
 
     mw_navTab = new NavTab(this);
 
