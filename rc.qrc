@@ -16,6 +16,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************** -->
+
 <RCC>
     <qresource prefix="/icons">
         <file alias="ic_content_paste_white_18dp">rc/icons/ic_content_paste_white_18dp.png</file>
