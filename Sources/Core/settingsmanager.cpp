@@ -23,7 +23,7 @@ SettingsManager::SettingsManager()
 {
     m_settings.reinterpret = (Core::ReinterpretData)(Core::ReinterpretData_TextToUrl | Core::ReinterpretData_TextToColor);
     m_settings.notify = true;
-    m_settings.firstStart = false;
+    m_settings.firstStart = true;
     m_settings.showThumbnails = true;
     m_settings.windowAlwaysOnTop = true;
     m_settings.lang = "en";
@@ -46,7 +46,7 @@ QString SettingsManager::filename() const
 
 void SettingsManager::setFilename(const QString &filename)
 {
-    m_filename = QDir::currentPath() + filename;
+    m_filename = filename;
 }
 
 QString SettingsManager::lang()
@@ -84,7 +84,7 @@ void SettingsManager::load()
     m_settings.showThumbnails = qsettings.value("Settings/ShowThumbnails", true).toBool();
     m_settings.windowAlwaysOnTop = qsettings.value("Settings/WindowAlwaysOnTop", true).toBool();
 
-    m_settings.firstStart = qsettings.value("AppState/FirstStart", false).toBool();
+    m_settings.firstStart = qsettings.value("AppState/FirstStart", true).toBool();
 
     m_settings.lang = qsettings.value("Language/CurrentLanguage", "AUTO").toString();
 }
