@@ -29,6 +29,9 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    QDir::setCurrent(qApp->applicationDirPath());
+
     UtilsUI::applyStyleSheet(":/css/app");
 
     SettingsManager manager;
