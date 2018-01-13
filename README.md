@@ -1,4 +1,3 @@
-<img style="float: right;" src="https://github.com/GregPlusPlus/MiniClipBoard/blob/master/Git/app_icon_small.png?raw=true">
 # MiniClipBoard
 *A free clipboard manager available under the GNU Lesser General Public License v3*
 ***
