@@ -1,4 +1,3 @@
-![alt text](https://github.com/GregPlusPlus/MiniClipBoard/raw/master/Git/app_icon_small.png)
 # MiniClipBoard
 *A free clipboard manager available under the GNU Lesser General Public License v3*
 ***
@@ -12,6 +11,3 @@ MiniClipBoard also features bookmarks that allows you to save your data over tim
 * [Windows x86 - ZIP](https://github.com/GregPlusPlus/MiniClipBoard/raw/master/Win_Builds/release_Winx86_v1.0.zip)
 * [Windows x86 - Installer](https://github.com/GregPlusPlus/MiniClipBoard/raw/master/Win_Builds/setup_MiniClipBoard_Winx86.exe)
 ###### Nb: Windows Installer allows MiniClipBoard to start when the system boots
-
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")  
-# Inline-style:
