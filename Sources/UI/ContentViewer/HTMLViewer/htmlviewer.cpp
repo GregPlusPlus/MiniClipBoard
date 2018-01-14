@@ -21,7 +21,9 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 HTMLViewer::HTMLViewer(const QString &html, QWidget *parent) : QWidget(parent)
 {
-    setAttribute(Qt::WA_TranslucentBackground);
+    //setAttribute(Qt::WA_TranslucentBackground);
+
+    setAutoFillBackground(true);
 
     m_layout = new QVBoxLayout;
     m_layout->setMargin(0);
@@ -35,4 +37,15 @@ HTMLViewer::HTMLViewer(const QString &html, QWidget *parent) : QWidget(parent)
     m_layout->addWidget(mw_text);
 
     setLayout(m_layout);
+}
+
+void HTMLViewer::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
+
+    QPainter painter(this);
+
+    painter.setBrush(Qt::white);
+
+    painter.drawRect(rect());
 }

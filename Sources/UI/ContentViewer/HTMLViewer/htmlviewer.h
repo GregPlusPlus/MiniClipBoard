@@ -25,6 +25,8 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QVBoxLayout>
 
+#include <QPainter>
+
 class HTMLViewer : public QWidget
 {
     Q_OBJECT
@@ -39,6 +41,9 @@ private:
     QTextBrowser *mw_text;
 
     QVBoxLayout *m_layout;
+
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // HTMLVIEWER_H

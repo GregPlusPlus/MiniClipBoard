@@ -100,7 +100,11 @@ void AbstractListedWidget::mouseMoveEvent(QMouseEvent *event)
 
 bool AbstractListedWidget::eventFilter(QObject *obj, QEvent *event)
 {
-    Q_UNUSED(obj)
+    //Q_UNUSED(obj)
+
+    if(!children().contains(obj)) {
+        return false;
+    }
 
     if(event->type() == QEvent::MouseMove) {
         m_mousePos = mapFromGlobal(QCursor::pos());
