@@ -69,6 +69,19 @@ SettingsDialog::SettingsDialog(SettingsManager *manager, QWidget *parent) : QDia
     m_langLayout->addWidget(mw_lang);
     m_langLayout->addWidget(mw_infoLang);
 
+    mw_updatesGroup = new QGroupBox(tr("Updates"), this);
+    m_updatesLayout = new QVBoxLayout;
+
+    mw_autoUpdates = new QCheckBox(tr("Auto check updates"), this);
+
+    mw_checkForUpdates = new QPushButton(tr("Check for updates"), this);
+    connect(mw_checkForUpdates, SIGNAL(clicked(bool)), this, SIGNAL(checkForUpdates()));
+
+    m_updatesLayout->addWidget(mw_autoUpdates);
+    m_updatesLayout->addWidget(mw_checkForUpdates);
+
+    mw_updatesGroup->setLayout(m_updatesLayout);
+
     mw_legalInfosGroup = new QGroupBox(tr("Legal informations"), this);
     m_legalInfoslayout = new QVBoxLayout;
     mw_legalInfosGroup->setLayout(m_legalInfoslayout);
@@ -93,6 +106,7 @@ SettingsDialog::SettingsDialog(SettingsManager *manager, QWidget *parent) : QDia
     m_layout->addWidget(mw_showThumbnails);
     m_layout->addWidget(mw_alwaysOnTop);
     m_layout->addWidget(mw_langGroupBox);
+    m_layout->addWidget(mw_updatesGroup);
     m_layout->addWidget(UtilsUI::createSeparator());
     m_layout->addWidget(mw_legalInfosGroup);
 
@@ -112,6 +126,7 @@ SettingsDialog::SettingsDialog(SettingsManager *manager, QWidget *parent) : QDia
     connect(mw_notify, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
     connect(mw_showThumbnails, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
     connect(mw_alwaysOnTop, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
+    connect(mw_autoUpdates, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
     connect(mw_lang, SIGNAL(activated(QString)), this, SLOT(settingsUIChanged()));
 }
 
@@ -128,6 +143,7 @@ void SettingsDialog::initUISettings()
     mw_notify->setChecked(m_manager->settings()->notify);
     mw_showThumbnails->setChecked(m_manager->settings()->showThumbnails);
     mw_alwaysOnTop->setChecked(m_manager->settings()->windowAlwaysOnTop);
+    mw_autoUpdates->setChecked(m_manager->settings()->autoCheckUpdates);
 
     mw_lang->addItems(SettingsManager::availableLanguages("Translations"));
     mw_lang->setCurrentText(m_manager->settings()->lang);
@@ -148,6 +164,7 @@ void SettingsDialog::saveSettings()
     m_manager->settings()->notify = mw_notify->isChecked();
     m_manager->settings()->showThumbnails = mw_showThumbnails->isChecked();
     m_manager->settings()->windowAlwaysOnTop = mw_alwaysOnTop->isChecked();
+    m_manager->settings()->autoCheckUpdates = mw_autoUpdates->isChecked();
 
     m_manager->settings()->lang = mw_lang->currentText();
 
@@ -157,7 +174,7 @@ void SettingsDialog::saveSettings()
 void SettingsDialog::showAppInfos()
 {
     QLabel *label = new QLabel(this);
-    label->setText(tr("MiniClipBoard %1 %2").arg(Utils::appVersion()).arg(m_manager->lang()));
+    label->setText(tr("MiniClipBoard V%1 %2").arg(Utils::appVersion()).arg(m_manager->lang()));
     label->setStyleSheet("padding-right: 10px;");
 
     mw_statusBar->addPermanentWidget(label);

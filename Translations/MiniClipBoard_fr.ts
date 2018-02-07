@@ -18,6 +18,8 @@
     </message>
     <message>
         <location filename="../Sources/UI/ContentViewer/contentviewer.cpp" line="130"/>
+        <location filename="../Sources/UI/ContentViewer/contentviewer.cpp" line="139"/>
+        <location filename="../Sources/UI/ContentViewer/contentviewer.cpp" line="142"/>
         <source>Plain text (*.txt)</source>
         <translation>Texte brut (*.txt)</translation>
     </message>
@@ -46,14 +48,18 @@
 <context>
     <name>CreditsDialog</name>
     <message>
-        <location filename="../Sources/UI/Settings/creditsdialog.cpp" line="5"/>
+        <location filename="../Sources/UI/Settings/creditsdialog.cpp" line="20"/>
         <source>Credits</source>
         <translation>Crédits</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/creditsdialog.cpp" line="21"/>
+        <location filename="../Sources/UI/Settings/creditsdialog.cpp" line="36"/>
+        <source>&lt;style&gt;a{color: #3399ff;}hr{width: 100%;border: 1px solid red;height: 2px;background-color: #839D2D;}&lt;/style&gt;&lt;p&gt;Some icons comes from &lt;a href=&quot;https://material.io/icons/&quot;&gt;https://material.io/icons/&lt;/a&gt;&lt;br&gt;and are available under the Apache License Version 2.0.&lt;hr&gt;All trademarks are property of their respective owners.&lt;/p&gt;</source>
+        <translation>&lt;style&gt;a{color: #3399ff;}hr{width: 100%;border: 1px solid red;height: 2px;background-color: #839D2D;}&lt;/style&gt;&lt;p&gt;Certaines icônes proviennent de &lt;a href=&quot;https://material.io/icons/&quot;&gt;https://material.io/icons/&lt;/a&gt;&lt;br&gt;et sont disponibles sous licence Apache License Version 2.0.&lt;hr&gt;All trademarks are property of their respective owners.&lt;/p&gt;</translation>
+    </message>
+    <message>
         <source>&lt;style&gt;a{color: #3399ff;}&lt;/style&gt;&lt;p&gt;Some icons comes from &lt;a href=&quot;https://material.io/icons/&quot;&gt;https://material.io/icons/&lt;/a&gt;&lt;br&gt;and are available under the Apache License Version 2.0.&lt;hr&gt;All trademarks are property of their respective owners.&lt;/p&gt;</source>
-        <translation>&lt;style&gt;a{color: #3399ff;}&lt;/style&gt;&lt;p&gt;Certaines icônes proviennent de &lt;a href=&quot;https://material.io/icons/&quot;&gt;https://material.io/icons/&lt;/a&gt;&lt;br&gt;et sont disponibles sous license Apache License Version 2.0.&lt;hr&gt;All trademarks are property of their respective owners.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;style&gt;a{color: #3399ff;}&lt;/style&gt;&lt;p&gt;Certaines icônes proviennent de &lt;a href=&quot;https://material.io/icons/&quot;&gt;https://material.io/icons/&lt;/a&gt;&lt;br&gt;et sont disponibles sous license Apache License Version 2.0.&lt;hr&gt;All trademarks are property of their respective owners.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -120,82 +126,160 @@
 <context>
     <name>DateTimePicker</name>
     <message>
-        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="10"/>
+        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="29"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="11"/>
+        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="30"/>
         <source>Before</source>
         <translation>Avant</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="12"/>
+        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="31"/>
         <source>After</source>
         <translation>Après</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="13"/>
+        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="32"/>
         <source>Between</source>
         <translation>Entre</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="19"/>
-        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="22"/>
+        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="38"/>
+        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="41"/>
         <source>dd/MM/yyyy hh:mm:ss</source>
         <translation>dd/MM/yyyy hh:mm:ss</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="28"/>
+        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="47"/>
         <source>From :</source>
         <translation>Depuis :</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="30"/>
+        <location filename="../Sources/UI/SearchBox/DateTimePicker/datetimepicker.cpp" line="49"/>
         <source>To :</source>
         <translation>Jusqu&apos;à :</translation>
     </message>
 </context>
 <context>
-    <name>ImageViwer</name>
+    <name>DownloadDialog</name>
     <message>
-        <location filename="../Sources/UI/ContentViewer/ImageViwer/imageviwer.cpp" line="28"/>
+        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="24"/>
+        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="28"/>
+        <source>Downloading file...</source>
+        <translation>Téléchargement du fichier...</translation>
+    </message>
+</context>
+<context>
+    <name>ImageViewer</name>
+    <message>
+        <location filename="../Sources/UI/ContentViewer/ImageViewer/imageviewer.cpp" line="29"/>
         <source>draw checkered background</source>
         <translation>Fond quadrillé</translation>
     </message>
 </context>
 <context>
+    <name>ImageViwer</name>
+    <message>
+        <source>draw checkered background</source>
+        <translation type="vanished">Fond quadrillé</translation>
+    </message>
+</context>
+<context>
+    <name>LinkViewer</name>
+    <message>
+        <location filename="../Sources/UI/ContentViewer/LinksViewer/linkviewer.cpp" line="64"/>
+        <source>From : %1</source>
+        <translation>Dans : %1</translation>
+    </message>
+</context>
+<context>
     <name>LinksViwer</name>
     <message>
-        <location filename="../Sources/UI/ContentViewer/LinksViwer/linksviwer.cpp" line="68"/>
         <source>File : </source>
-        <translation>Fichier : </translation>
+        <translation type="vanished">Fichier : </translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="81"/>
+        <location filename="../Sources/mainwindow.cpp" line="87"/>
         <source>All clipboards</source>
         <translation>Toutes les données copiées</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="82"/>
+        <location filename="../Sources/mainwindow.cpp" line="88"/>
         <source>Favorites</source>
         <translation>Favoris</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="338"/>
+        <location filename="../Sources/mainwindow.cpp" line="270"/>
+        <source>Updates available</source>
+        <translation>Des mises à jour sont disponibles</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="271"/>
+        <source>A new version of MiniClipBoard is available.&lt;br&gt;New version : &lt;i&gt;%1&lt;/i&gt; | Current version : &lt;i&gt;%2&lt;/i&gt;&lt;br&gt;Do you want to download and install it?</source>
+        <translation>Une nouvelle version de MiniClipBoard est disponible. &lt;br&gt;Nouvelle version: &lt;i&gt;%1&lt;/i&gt; | Version actuelle : &lt;i&gt;%2&lt;/i&gt;Voulez-vous la télécharger et l&apos;installer maintenant?</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="278"/>
+        <source>Downloading file from &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</source>
+        <translation>Téléchargement du fichier depuis &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="281"/>
+        <source>Writing file to disk...</source>
+        <translation>Ecriture du fichier sur le disque...</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="289"/>
+        <source>Ready to install...</source>
+        <translation>Prêt à installer...</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="293"/>
+        <source>Failed to update MiniClipBoard</source>
+        <translation>Impossible de mettre à jour MiniClipBoard</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="293"/>
+        <source>Unable to write file to disk.&lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</source>
+        <translation>Impossible d&apos;écrire le fichier sur le disque.&lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="299"/>
+        <source>Updater error !</source>
+        <translation>Erreur durant la mise à jour!</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="299"/>
+        <source>An error occured when downloading file : &lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</source>
+        <translation>Une erreur s&apos;est produite pendant le téléchargement du fichier : &lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="309"/>
+        <source>Download completed!</source>
+        <translation>Téléchargement terminé!</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="309"/>
+        <source>MiniClipBoard will be closed to complete the installation.</source>
+        <translation>MiniClipBoard va être fermé pour terminer l&apos;installation.</translation>
+    </message>
+    <message>
+        <location filename="../Sources/mainwindow.cpp" line="392"/>
         <source>MiniClipBoard</source>
         <translation>MiniClipBoard</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="340"/>
+        <location filename="../Sources/mainwindow.cpp" line="394"/>
         <source>MiniClipBoard - 1 new</source>
         <translation>MiniClipBoard - 1 nouveau</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="342"/>
+        <location filename="../Sources/mainwindow.cpp" line="396"/>
         <source>MiniClipBoard - %1 news</source>
         <translation>MiniClipBoard - %1 nouveaux</translation>
     </message>
@@ -203,9 +287,13 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../Sources/Utils/utils.cpp" line="46"/>
         <source>&lt;style&gt;a{color: #3399ff;}&lt;/style&gt;&lt;p&gt;&lt;h1&gt;MiniClipBoard&lt;/h1&gt;This application is made in C++, based on &lt;a href=&quot;www.qt.io&quot;&gt;Qt&lt;/a&gt; %1.&lt;hr&gt;Copyright © 2017 Grégoire BOST&lt;br&gt;&lt;br&gt;%2&lt;/p&gt;</source>
-        <translation>&lt;style&gt;a{color: #3399ff;}&lt;/style&gt;&lt;p&gt;&lt;h1&gt;MiniClipBoard&lt;/h1&gt;This application is made in C++, based on &lt;a href=&quot;www.qt.io&quot;&gt;Qt&lt;/a&gt; %1.&lt;hr&gt;Copyright © 2017 Grégoire BOST&lt;br&gt;&lt;br&gt;%2&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;style&gt;a{color: #3399ff;}&lt;/style&gt;&lt;p&gt;&lt;h1&gt;MiniClipBoard&lt;/h1&gt;This application is made in C++, based on &lt;a href=&quot;www.qt.io&quot;&gt;Qt&lt;/a&gt; %1.&lt;hr&gt;Copyright © 2017 Grégoire BOST&lt;br&gt;&lt;br&gt;%2&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Utils/utils.cpp" line="46"/>
+        <source>&lt;style&gt;a{color: #3399ff;}&lt;/style&gt;&lt;p&gt;&lt;h1&gt;MiniClipBoard&lt;/h1&gt;This application is made in C++, based on &lt;a href=&quot;www.qt.io&quot;&gt;Qt&lt;/a&gt; %1.&lt;br&gt;For more informations, please visit the &lt;a href=&quot;https://github.com/GregPlusPlus/MiniClipBoard&quot;&gt;official website&lt;/a&gt;.&lt;hr&gt;Copyright © 2017 Grégoire BOST&lt;br&gt;&lt;br&gt;%2&lt;/p&gt;</source>
+        <translation>&lt;style&gt;a{color: #3399ff;}&lt;/style&gt;&lt;p&gt;&lt;h1&gt;MiniClipBoard&lt;/h1&gt;Cette application a été écrite en C++ et est basée sur &lt;a href=&quot;www.qt.io&quot;&gt;Qt&lt;/a&gt; %1.&lt;br&gt;Pour plus d&apos;informations, visitez &lt;a href=&quot;https://github.com/GregPlusPlus/MiniClipBoard&quot;&gt;le site officiel&lt;/a&gt;.&lt;hr&gt;Copyright © 2017 Grégoire BOST&lt;br&gt;&lt;br&gt;%2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -315,23 +403,42 @@
     </message>
     <message>
         <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="72"/>
+        <source>Updates</source>
+        <translation>Mises à jour</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="75"/>
+        <source>Auto check updates</source>
+        <translation type="unfinished">Vérifier les mises à jour automatiquement</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="77"/>
+        <source>Check for updates</source>
+        <translation>Vérifier les mises à jour</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="85"/>
         <source>Legal informations</source>
         <translation>Informations légales</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="76"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="89"/>
         <source>About MiniClipBoard...</source>
         <translation>A propos de MiniClipBoard...</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="82"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="95"/>
         <source>Credits</source>
         <translation>Crédits</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="160"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="177"/>
+        <source>MiniClipBoard V%1 %2</source>
+        <translation>MiniClipBoard V%1 %2</translation>
+    </message>
+    <message>
         <source>MiniClipBoard %1 %2</source>
-        <translation>MiniClipBoard %1 %2p</translation>
+        <translation type="vanished">MiniClipBoard %1 %2p</translation>
     </message>
 </context>
 <context>
@@ -365,6 +472,16 @@
         <location filename="../Sources/UI/PopupWindow/tray.cpp" line="38"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
+    </message>
+</context>
+<context>
+    <name>Updater</name>
+    <message>
+        <location filename="../Sources/Core/updater.cpp" line="101"/>
+        <source>Released on %1.
+%2</source>
+        <translation>Publiée le %1.
+%2</translation>
     </message>
 </context>
 <context>

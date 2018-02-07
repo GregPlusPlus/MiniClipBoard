@@ -399,14 +399,14 @@ QScrollArea{
 }
 
 QProgressBar {
-	max-height: 9px;
+        max-height: 5px;
 	text-align: center;
 	background: #293A4D;
 	border-top: 3px solid #1A2026;
 }
 
 QProgressBar::chunk {
-	background-color: #05B8CC;
+        background-color: #178793;
 	width: 1px;
 }
 

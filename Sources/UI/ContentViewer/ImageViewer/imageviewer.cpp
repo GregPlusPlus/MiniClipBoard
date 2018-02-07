@@ -17,9 +17,9 @@ You should have received a copy of the GNU Lesser General Public License
 along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#include "imageviwer.h"
+#include "imageviewer.h"
 
-ImageViwer::ImageViwer(const QPixmap &image, QWidget *parent) : QWidget(parent), m_image(image)
+ImageViewer::ImageViewer(const QPixmap &image, QWidget *parent) : QWidget(parent), m_image(image)
 {
     m_zoom = 1;
 
@@ -38,7 +38,7 @@ ImageViwer::ImageViwer(const QPixmap &image, QWidget *parent) : QWidget(parent),
     });
 }
 
-void ImageViwer::drawCheckeredBg(QPainter &painter)
+void ImageViewer::drawCheckeredBg(QPainter &painter)
 {
     painter.setBrush(QColor(Qt::white));
 
@@ -54,7 +54,7 @@ void ImageViwer::drawCheckeredBg(QPainter &painter)
     }
 }
 
-void ImageViwer::constrainImgPos()
+void ImageViewer::constrainImgPos()
 {
     if(m_actualImgPos.x() <= width() - 10 - (m_scale.width() * m_zoom)) {
         m_actualImgPos.setX(width() - 10 - (m_scale.width() * m_zoom));
@@ -73,13 +73,13 @@ void ImageViwer::constrainImgPos()
     }
 }
 
-void ImageViwer::updateScale()
+void ImageViewer::updateScale()
 {
     m_scale = (m_image.width() > width() || m_image.height() > height() - 30)?m_image.size().scaled(QSize(width() - 20, height() - 45), Qt::KeepAspectRatio) * m_zoom:m_image.size();
     constrainImgPos();
 }
 
-void ImageViwer::paintEvent(QPaintEvent *event)
+void ImageViewer::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
 
@@ -109,7 +109,7 @@ void ImageViwer::paintEvent(QPaintEvent *event)
     //}
 }
 
-void ImageViwer::wheelEvent(QWheelEvent *event)
+void ImageViewer::wheelEvent(QWheelEvent *event)
 {
     int numDegrees = event->delta() / 8;
     int numSteps = numDegrees / 15;
@@ -129,21 +129,21 @@ void ImageViwer::wheelEvent(QWheelEvent *event)
     update();
 }
 
-void ImageViwer::enterEvent(QEvent *event)
+void ImageViewer::enterEvent(QEvent *event)
 {
     Q_UNUSED(event)
 
     m_mouseIn = true;
 }
 
-void ImageViwer::leaveEvent(QEvent *event)
+void ImageViewer::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event)
 
     m_mouseIn = false;
 }
 
-void ImageViwer::mouseMoveEvent(QMouseEvent *event)
+void ImageViewer::mouseMoveEvent(QMouseEvent *event)
 {
     m_mousePos = event->pos();
 
@@ -157,7 +157,7 @@ void ImageViwer::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
-void ImageViwer::mousePressEvent(QMouseEvent *event)
+void ImageViewer::mousePressEvent(QMouseEvent *event)
 {
     m_mousePress = true;
     m_mousePosPress = event->pos();
@@ -169,7 +169,7 @@ void ImageViwer::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void ImageViwer::mouseReleaseEvent(QMouseEvent *event)
+void ImageViewer::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
 
@@ -185,7 +185,7 @@ void ImageViwer::mouseReleaseEvent(QMouseEvent *event)
     update();
 }
 
-void ImageViwer::resizeEvent(QResizeEvent *event)
+void ImageViewer::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event)
 

@@ -98,6 +98,7 @@ struct Settings {
     bool showThumbnails;
     bool firstStart;
     bool windowAlwaysOnTop;
+    bool autoCheckUpdates;
 };
 
 struct DateTimeFilter

@@ -25,6 +25,7 @@ QFrame *UtilsUI::createSeparator(QFrame::Shape shape)
     line->setFrameShape(shape);
     line->setFrameShadow(QFrame::Raised);
     line->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    line->setFixedHeight(2);
     return line;
 }
 

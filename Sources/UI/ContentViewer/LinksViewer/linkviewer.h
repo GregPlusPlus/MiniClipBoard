@@ -17,9 +17,50 @@ You should have received a copy of the GNU Lesser General Public License
 along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#ifndef APPINFOS_H
-#define APPINFOS_H
+#ifndef LINKVIEWER_H
+#define LINKVIEWER_H
 
-#define APP_VERSION "1.1"
+#include <QWidget>
+#include <QCommandLinkButton>
+#include <QPushButton>
+#include <QLabel>
 
-#endif // APPINFOS_H
+#include <QGridLayout>
+
+#include <QUrl>
+
+#include <QDesktopServices>
+
+#include <QFileInfo>
+#include <QDir>
+
+#include <QDebug>
+
+#include "../../../UI/ListWidget/abstractlistedwidget.h"
+#include "../../UtilsUI/utilsui.h"
+
+class LinkViewer : public AbstractListedWidget
+{
+    Q_OBJECT
+public:
+    explicit LinkViewer(const QUrl &url = QUrl(), QWidget *parent = nullptr);
+    ~LinkViewer();
+
+signals:
+
+public slots:
+    void setUrl(const QUrl &url);
+    void removeWidget();
+    void fadeIn();
+    void fadeOut();
+
+private:
+    QGridLayout *m_layout;
+
+    QLabel *mw_icon;
+    QCommandLinkButton *mw_link;
+
+    QUrl m_url;
+};
+
+#endif // LINKVIEWER_H

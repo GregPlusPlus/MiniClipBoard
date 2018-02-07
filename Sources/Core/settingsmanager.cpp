@@ -83,6 +83,7 @@ void SettingsManager::load()
     m_settings.notify = qsettings.value("Settings/Notify", true).toBool();
     m_settings.showThumbnails = qsettings.value("Settings/ShowThumbnails", true).toBool();
     m_settings.windowAlwaysOnTop = qsettings.value("Settings/WindowAlwaysOnTop", true).toBool();
+    m_settings.autoCheckUpdates = qsettings.value("Settings/AutoCheckUpdates", true).toBool();
 
     m_settings.firstStart = qsettings.value("AppState/FirstStart", true).toBool();
 
@@ -98,6 +99,7 @@ void SettingsManager::save()
     qsettings.setValue("Notify", m_settings.notify);
     qsettings.setValue("ShowThumbnails", m_settings.showThumbnails);
     qsettings.setValue("WindowAlwaysOnTop", m_settings.windowAlwaysOnTop);
+    qsettings.setValue("AutoCheckUpdates", m_settings.autoCheckUpdates);
     qsettings.endGroup();
 
     qsettings.beginGroup("AppState");

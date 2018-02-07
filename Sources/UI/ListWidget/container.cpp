@@ -25,6 +25,14 @@ Container::Container(QWidget *parent) : QScrollArea(parent)
     setAutoFillBackground(true);
     setAcceptDrops(true);
 
+    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, [=](){
+        mw_widget->update();
+    });
+    connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateShadow()));
+    connect(this->horizontalScrollBar(), &QScrollBar::valueChanged, [=](){
+        mw_widget->update();
+    });
+
     mw_widget = new QWidget(this);
     mw_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -34,6 +42,14 @@ Container::Container(QWidget *parent) : QScrollArea(parent)
 
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
     m_layout->addSpacerItem(m_spacer);
+
+    mw_shadow = new QWidget(this);
+    mw_shadow->setAttribute(Qt::WA_TransparentForMouseEvents);
+    mw_shadow->setFixedHeight(30);
+    mw_shadow->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    mw_shadow->setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+                             "stop:.07 transparent, stop:.9 rgb(10, 10, 20, 180));");
+    updateShadow();
 
     setWidget(mw_widget);
 }
@@ -75,6 +91,36 @@ void Container::clear()
     }
 
     m_widgets.clear();
+}
+
+void Container::updateShadow()
+{
+    if(verticalScrollBar()->maximum() > 0 && verticalScrollBar()->value() < verticalScrollBar()->maximum()) {
+
+        int y = (verticalScrollBar()->maximum() - verticalScrollBar()->value()) / 4;
+
+        y = (y < mw_shadow->height() - 10)?mw_shadow->height() - y - 10:0;
+
+        mw_shadow->show();
+        mw_shadow->setGeometry(0, height() - mw_shadow->height() + y,
+                               width(),
+                               mw_shadow->height());
+    } else {
+        //if(verticalScrollBar()->maximum() > 0) {
+            mw_shadow->show();
+            mw_shadow->setGeometry(0, height() - 10,
+                                   width(),
+                                   mw_shadow->height());
+        /*} else {
+            mw_shadow->hide();
+        }*/
+    }
+}
+
+void Container::resizeEvent(QResizeEvent *event)
+{
+    QScrollArea::resizeEvent(event);
+    updateShadow();
 }
 
 QList<AbstractListedWidget *> Container::widgets() const

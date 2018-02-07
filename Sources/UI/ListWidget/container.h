@@ -22,6 +22,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QWidget>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QSpacerItem>
 
 #include <QVBoxLayout>
@@ -33,6 +34,8 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include <QBitmap>
 
 #include <QList>
+
+#include <QResizeEvent>
 
 #include <QDebug>
 
@@ -54,13 +57,20 @@ public slots:
     void addWidget(AbstractListedWidget *widget);
     void removeWidget(AbstractListedWidget *widget);
     void clear();
+    void updateShadow();
 
 private:
     QVBoxLayout *m_layout;
+
     QWidget *mw_widget;
+    QWidget *mw_shadow;
+
     QSpacerItem *m_spacer;
 
     QList<AbstractListedWidget *> m_widgets;
+
+protected:
+    void resizeEvent(QResizeEvent *event);
 };
 
 #endif // CONTAINER_H

@@ -17,42 +17,27 @@ You should have received a copy of the GNU Lesser General Public License
 along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#ifndef LINKSVIWER_H
-#define LINKSVIWER_H
+#include "linksviewer.h"
 
-#include <QWidget>
-#include <QScrollArea>
-#include <QLabel>
-
-#include <QVBoxLayout>
-
-#include <QDesktopServices>
-#include <QFileInfo>
-
-#include <QList>
-#include <QUrl>
-
-#include "../../../Core/core.h"
-
-class LinksViwer : public QWidget
+LinksViewer::LinksViewer(const Core::Urls &urls, QWidget *parent) : QWidget(parent), m_urls(urls)
 {
-    Q_OBJECT
-public:
-    explicit LinksViwer(const Core::Urls &urls, QWidget *parent = nullptr);
+    m_layout = new QVBoxLayout;
+    m_layout->setMargin(0);
 
-signals:
+    mw_container = new Container(this);
 
-public slots:
+    m_layout->addWidget(mw_container);
 
-private:
-    QLabel *mw_links;
-    QScrollArea *mw_scroll;
+    setLayout(m_layout);
 
-    QVBoxLayout *m_layout;
+    displayLinks();
+}
 
-private:
-    QString getHtmlFromUrls(const Core::Urls &urls);
-    QString getTextFromUrl(const QUrl &url);
-};
+void LinksViewer::displayLinks()
+{
+    for(int i = 0; i < m_urls.count(); i++) {
+        LinkViewer *viewer = new LinkViewer(m_urls.at(i), this);
 
-#endif // LINKSVIWER_H
+        mw_container->addWidget(viewer);
+    }
+}

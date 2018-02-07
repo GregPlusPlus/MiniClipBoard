@@ -201,3 +201,27 @@ Core::ClipboardData Core::byteArrayToClipboardData(const QByteArray &array, QDat
 
     return data;
 }
+
+QList<Core::Bookmark> Core::reorderBookmarks(const QList<Core::Bookmark> &bookmarks)
+{
+    QList<Core::Bookmark> bms1 = bookmarks;
+    QList<Core::Bookmark> bms2;
+
+    while(!bms1.isEmpty()) {
+        Core::Bookmark bm = bms1.first();
+        int index = 0;
+
+        for(int i = 0; i < bms1.count(); i++) {
+            if(bms1.at(i).dt <= bm.dt) {
+                bm = bms1.at(i);
+                index = i;
+            }
+        }
+
+        bms2.append(bm);
+
+        bms1.removeAt(index);
+    }
+
+    return bms2;
+}

@@ -60,6 +60,7 @@ public:
 
 signals:
     void settingsChanged();
+    void checkForUpdates();
 
 public slots:
     void settingsUIChanged();
@@ -69,10 +70,12 @@ private:
     QVBoxLayout *m_layout;
     QVBoxLayout *m_reinterpretLayout;
     QHBoxLayout *m_langLayout;
+    QVBoxLayout *m_updatesLayout;
     QVBoxLayout *m_legalInfoslayout;
 
     QGroupBox *mw_reinterpretGroupBox;
     QGroupBox *mw_langGroupBox;
+    QGroupBox *mw_updatesGroup;
     QGroupBox *mw_legalInfosGroup;
 
     QCheckBox *mw_reinterpretUrl;
@@ -80,10 +83,12 @@ private:
     QCheckBox *mw_notify;
     QCheckBox *mw_showThumbnails;
     QCheckBox *mw_alwaysOnTop;
+    QCheckBox *mw_autoUpdates;
 
     QComboBox *mw_lang;
     QPushButton *mw_infoLang;
 
+    QPushButton *mw_checkForUpdates;
     QPushButton *mw_aboutButton;
     QPushButton *mw_creditsButton;
 

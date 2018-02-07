@@ -34,11 +34,11 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDebug>
 
-class ImageViwer : public QWidget
+class ImageViewer : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ImageViwer(const QPixmap &image, QWidget *parent = nullptr);
+    explicit ImageViewer(const QPixmap &image, QWidget *parent = nullptr);
 
 signals:
 

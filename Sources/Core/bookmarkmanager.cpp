@@ -28,6 +28,8 @@ bool BookmarkManager::saveDataToFile(const QByteArray &data, const QUuid &uuid)
 {
     QString path = QString("%1/%2").arg(m_dir.absolutePath()).arg(uuid.toString());
 
+    qDebug() << path;
+
     QFile file(path);
     if(!file.open(QIODevice::WriteOnly)) {
         return false;

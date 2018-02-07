@@ -24,13 +24,15 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
     m_newDataCount = 0;
     m_ignoreNextCopy = false;
     m_settingsDialogAlreadyOpen = false;
+    m_updatesAlreadyChecked = false;
     mw_viewer = nullptr;
     mw_loader = nullptr;
     mw_welcome = nullptr;
-    m_settingsManager = nullptr;
+    mp_settingsManager = nullptr;
+    m_bookmarksPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bookmarks";
 
-    setWindowIcon(QIcon(":/images/ic_content_paste_white_48dp"));
-    setTrayIcon(QIcon(":/images/ic_content_paste_white_48dp_2x"));
+    setWindowIcon(QIcon(":/images/ic_content_paste_white_48dp_2x"));
+    setTrayIcon(QIcon(":/icons/ic_content_paste_white_18dp"));
     setIconMask(QBitmap(":/icons/ic_content_paste_white_18dp_mask"));
     setAcceptDrops(true);
 
@@ -54,10 +56,13 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
 
         m_settingsDialogAlreadyOpen = true;
 
-        SettingsDialog *dialog = new SettingsDialog(m_settingsManager);
+        SettingsDialog *dialog = new SettingsDialog(mp_settingsManager);
         connect(dialog, &SettingsDialog::settingsChanged, [=]() {
-            m_settingsManager->save();
+            mp_settingsManager->save();
             applySettings();
+        });
+        connect(dialog, &SettingsDialog::checkForUpdates, [=]() {
+            checkForUpdates();
         });
         connect(dialog, &SettingsDialog::finished, [=](int result) {
             Q_UNUSED(result)
@@ -68,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
         dialog->exec();
     });
 
-    m_bookmarkManager.setDir(QDir("bookmarks"));
+    initBookmarksDir();
 
     mw_navTab = new NavTab(this);
 
@@ -89,6 +94,14 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
     mw_loader->hide();
 
     createBookmarkWidgets();
+}
+
+void MainWindow::initBookmarksDir()
+{
+    if(!QDir(m_bookmarksPath).exists()) {
+        QDir().mkpath(m_bookmarksPath);
+    }
+    m_bookmarkManager.setDir(QDir(m_bookmarksPath));
 }
 
 void MainWindow::dataChanged()
@@ -114,7 +127,7 @@ void MainWindow::dataChanged()
         return;
     }
 
-    if(m_settingsManager->settings()->notify) {
+    if(mp_settingsManager->settings()->notify) {
         notify();
     }
 
@@ -123,13 +136,13 @@ void MainWindow::dataChanged()
         updateDataCount();
     }
 
-    Core::autoReinterpretData(clipboardData, m_settingsManager->settings()->reinterpret);
+    Core::autoReinterpretData(clipboardData, mp_settingsManager->settings()->reinterpret);
 
     DataWidget *w = new DataWidget(this);
     w->generateUuid();
     w->setData(clipboardData);
     w->setDateTime(QDateTime::currentDateTime());
-    w->setShowThumbnails(m_settingsManager->settings()->showThumbnails);
+    w->setShowThumbnails(mp_settingsManager->settings()->showThumbnails);
     connect(w, SIGNAL(ignoreNextCopy()), this, SLOT(ignoreNextCopy()));
     connect(w, SIGNAL(bookmarkChanged(bool)), this, SLOT(widgetBookmarkedChanged(bool)));
     connect(w, SIGNAL(seeContent(DataWidget*)), this, SLOT(seeContent(DataWidget*)));
@@ -240,14 +253,74 @@ void MainWindow::showWelcomeScreen()
     }
 }
 
+void MainWindow::updaterFinishedCheck(QString version, QString changelog, bool isAppLastVersion)
+{
+    if(isAppLastVersion) {
+        return;
+    }
+
+    QString fileSuffix;
+    if(Utils::buildOS() == "windows") {
+        fileSuffix = ".exe";
+    }
+
+    m_updaterPath = QString("MiniClipBoard_update%1").arg(fileSuffix);
+
+    QMessageBox box(QMessageBox::Question,
+                    tr("Updates available"),
+                    tr("A new version of MiniClipBoard is available.<br>New version : <i>%1</i> | Current version : <i>%2</i><br>Do you want to download and install it?").arg(version).arg(Utils::appVersion()),
+                    QMessageBox::Yes | QMessageBox::No);
+    box.setDetailedText(changelog);
+    box.exec();
+
+    if(box.standardButton(box.clickedButton()) == QMessageBox::Yes) {
+        DownloadDialog *dial = new DownloadDialog();
+        dial->setMessage(tr("Downloading file from <a href=\"%1\">%2</a> ...").arg(m_updater.getLastVersion().installerURL).arg(m_updater.getLastVersion().installerURL));
+
+        connect(&m_updater, &Updater::downloadFinished, [=]() {
+            dial->setMessage(tr("Writing file to disk..."));
+
+            QFile lastversion(m_updaterPath);
+
+            if(lastversion.open(QIODevice::WriteOnly)) {
+                lastversion.write(m_updater.getDataInstaller());
+                lastversion.close();
+
+                dial->setMessage(tr("Ready to install..."));
+
+                updaterDownloadFinished();
+            } else {
+                QMessageBox::warning(nullptr, tr("Failed to update MiniClipBoard"), tr("Unable to write file to disk.<br><i>%1</i>").arg(lastversion.errorString()));
+            }
+        });
+        //connect(&m_updater, SIGNAL(finishedDownload()), this, SLOT(updaterDownloadFinished()));
+        connect(&m_updater, SIGNAL(progress(qint64,qint64)), dial, SLOT(progress(qint64,qint64)));
+        connect(&m_updater, &Updater::error, [=](QString error) {
+            QMessageBox::warning(nullptr, tr("Updater error !"), tr("An error occured when downloading file : <br><i>%1</i>").arg(error));
+        });
+
+        m_updater.downloadNewVersion();
+        dial->show();
+    }
+}
+
+void MainWindow::updaterDownloadFinished()
+{
+    QMessageBox::information(nullptr, tr("Download completed!"), tr("MiniClipBoard will be closed to complete the installation."));
+
+    QProcess::startDetached(m_updaterPath);
+
+    qApp->exit();
+}
+
 SettingsManager *MainWindow::settingsManager() const
 {
-    return m_settingsManager;
+    return mp_settingsManager;
 }
 
 void MainWindow::setSettingsManager(SettingsManager *settingsManager)
 {
-    m_settingsManager = settingsManager;
+    mp_settingsManager = settingsManager;
 
     applySettings();
 }
@@ -280,37 +353,13 @@ QList<Core::Bookmark> MainWindow::loadBookmarks()
     return bookmarks;
 }
 
-QList<Core::Bookmark> MainWindow::reorderBookmarks(const QList<Core::Bookmark> &bookmarks)
-{
-    QList<Core::Bookmark> bms1 = bookmarks;
-    QList<Core::Bookmark> bms2;
-
-    while(!bms1.isEmpty()) {
-        Core::Bookmark bm = bms1.first();
-        int index = 0;
-
-        for(int i = 0; i < bms1.count(); i++) {
-            if(bms1.at(i).dt <= bm.dt) {
-                bm = bms1.at(i);
-                index = i;
-            }
-        }
-
-        bms2.append(bm);
-
-        bms1.removeAt(index);
-    }
-
-    return bms2;
-}
-
 void MainWindow::createBookmarkWidgets()
 {
     mw_loader->reveal();
 
     QList<Core::Bookmark> bookmarks = loadBookmarks();
 
-    bookmarks = reorderBookmarks(bookmarks);
+    bookmarks = Core::reorderBookmarks(bookmarks);
 
     for(int i = 0; i < bookmarks.count(); i++) {
         Core::ClipboardData data = bookmarks.at(i).data;
@@ -350,16 +399,21 @@ void MainWindow::updateDataCount()
 
 void MainWindow::applySettings()
 {
-    if(m_settingsManager->settings()->firstStart) {
-        m_settingsManager->settings()->firstStart = false;
-        m_settingsManager->save();
+    if(mp_settingsManager->settings()->firstStart) {
+        mp_settingsManager->settings()->firstStart = false;
+        mp_settingsManager->save();
 
         showWelcomeScreen();
     }
 
-    setWindowFlag(Qt::WindowStaysOnTopHint, m_settingsManager->settings()->windowAlwaysOnTop);
+    setWindowFlag(Qt::WindowStaysOnTopHint, mp_settingsManager->settings()->windowAlwaysOnTop);
 
     updateShowThumbnails();
+
+    if(mp_settingsManager->settings()->autoCheckUpdates && !m_updatesAlreadyChecked) {
+        checkForUpdates();
+        m_updatesAlreadyChecked = true;
+    }
 }
 
 void MainWindow::updateShowThumbnails()
@@ -367,13 +421,20 @@ void MainWindow::updateShowThumbnails()
     for(int i = 0; i < mw_container->getContainer()->widgets().count(); i++) {
         DataWidget *w = qobject_cast<DataWidget*>(mw_container->getContainer()->widgets().at(i));
 
-        w->setShowThumbnails(m_settingsManager->settings()->showThumbnails);
+        w->setShowThumbnails(mp_settingsManager->settings()->showThumbnails);
     }
     for(int i = 0; i < mw_containerBookmarks->getContainer()->widgets().count(); i++) {
         DataWidget *w = qobject_cast<DataWidget*>(mw_containerBookmarks->getContainer()->widgets().at(i));
 
-        w->setShowThumbnails(m_settingsManager->settings()->showThumbnails);
+        w->setShowThumbnails(mp_settingsManager->settings()->showThumbnails);
     }
+}
+
+void MainWindow::checkForUpdates()
+{
+    disconnect(&m_updater, SIGNAL(finishedCheck(QString,QString,bool)), this, SLOT(updaterFinishedCheck(QString,QString,bool)));
+    connect(&m_updater, SIGNAL(finishedCheck(QString,QString,bool)), this, SLOT(updaterFinishedCheck(QString,QString,bool)));
+    m_updater.checkForUpdates();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

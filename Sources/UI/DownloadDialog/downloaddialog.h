@@ -17,9 +17,36 @@ You should have received a copy of the GNU Lesser General Public License
 along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#ifndef APPINFOS_H
-#define APPINFOS_H
+#ifndef DOWNLOADDIALOG_H
+#define DOWNLOADDIALOG_H
 
-#define APP_VERSION "1.1"
+#include <QWidget>
+#include <QDialog>
+#include <QLabel>
+#include <QProgressBar>
 
-#endif // APPINFOS_H
+#include <QGridLayout>
+
+#include <QDebug>
+
+class DownloadDialog : public QDialog
+{
+    Q_OBJECT
+public:
+    explicit DownloadDialog(QWidget *parent = nullptr);
+
+signals:
+
+public slots:
+    void progress(qint64 received, qint64 total);
+    void downloadFinished();
+    void setMessage(const QString &text);
+
+private:
+    QGridLayout *m_layout;
+
+    QLabel *mw_message;
+    QProgressBar *mw_progress;
+};
+
+#endif // DOWNLOADDIALOG_H

@@ -46,8 +46,8 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include "../../Core/core.h"
 #include "TextViewer/textviewer.h"
 #include "HTMLViewer/htmlviewer.h"
-#include "ImageViwer/imageviwer.h"
-#include "LinksViwer/linksviwer.h"
+#include "ImageViewer/imageviewer.h"
+#include "LinksViewer/linksviewer.h"
 #include "ColorViewer/colorviewer.h"
 
 class ContentViewer : public QWidget
@@ -85,7 +85,7 @@ private:
     QLabel *mw_title;
     QLabel *mw_infosLabel;
     QPushButton *mw_saveButton;
-    QWidget *mw_viwer;
+    QWidget *mw_viewer;
 
     Core::ClipboardData m_data;
 

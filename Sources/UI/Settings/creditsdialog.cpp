@@ -35,6 +35,12 @@ CreditsDialog::CreditsDialog(QWidget *parent) : QDialog(parent)
 
     mw_text->setText(tr("<style>" \
                         "a{color: #3399ff;}" \
+                        "hr{" \
+                        "width: 100%;" \
+                        "border: 1px solid red;" \
+                        "height: 2px;" \
+                        "background-color: #839D2D;" \
+                        "}" \
                         "</style>" \
                         "<p>" \
                         "Some icons comes from <a href=\"https://material.io/icons/\">https://material.io/icons/</a><br>" \

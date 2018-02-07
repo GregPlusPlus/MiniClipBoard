@@ -25,7 +25,7 @@
 
 QT       += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets xml network
 
 TARGET = MiniClipBoard
 TEMPLATE = app
@@ -48,6 +48,7 @@ SOURCES += \
         Sources/Core/core.cpp \
         Sources/Core/bookmarkmanager.cpp \
         Sources/Core/settingsmanager.cpp \
+        Sources/Core/updater.cpp \
         Sources/Utils/utils.cpp \
         Sources/UI/UtilsUI/utilsui.cpp \
         Sources/UI/ListWidget/container.cpp \
@@ -66,14 +67,16 @@ SOURCES += \
         Sources/UI/ContentViewer/contentviewer.cpp \
         Sources/UI/ContentViewer/TextViewer/textviewer.cpp \
         Sources/UI/ContentViewer/HTMLViewer/htmlviewer.cpp \
-        Sources/UI/ContentViewer/ImageViwer/imageviwer.cpp \
-        Sources/UI/ContentViewer/LinksViwer/linksviwer.cpp \
+        Sources/UI/ContentViewer/ImageViewer/imageviewer.cpp \
         Sources/UI/ContentViewer/ColorViewer/colorviewer.cpp \
+        Sources/UI/ContentViewer/LinksViewer/linkviewer.cpp \
+        Sources/UI/ContentViewer/LinksViewer/linksviewer.cpp \
         Sources/UI/Settings/settingsdialog.cpp \
         Sources/UI/Settings/aboutdialog.cpp \
         Sources/UI/Settings/creditsdialog.cpp \
         Sources/UI/LoaderScreen/loaderscreen.cpp \
-        Sources/UI/WelcomeScreen/welcomescreen.cpp
+        Sources/UI/WelcomeScreen/welcomescreen.cpp \
+        Sources/UI/DownloadDialog/downloaddialog.cpp
 
 HEADERS += \
         Sources/mainwindow.h \
@@ -81,7 +84,9 @@ HEADERS += \
         Sources/Core/core.h \
         Sources/Core/bookmarkmanager.h \
         Sources/Core/settingsmanager.h \
+        Sources/Core/updater.h \
         Sources/Utils/legal.h \
+        Sources/Utils/appinfos.h \
         Sources/Utils/utils.h \
         Sources/UI/UtilsUI/utilsui.h \
         Sources/UI/ListWidget/container.h \
@@ -100,17 +105,23 @@ HEADERS += \
         Sources/UI/ContentViewer/contentviewer.h \
         Sources/UI/ContentViewer/TextViewer/textviewer.h \
         Sources/UI/ContentViewer/HTMLViewer/htmlviewer.h \
-        Sources/UI/ContentViewer/ImageViwer/imageviwer.h \
-        Sources/UI/ContentViewer/LinksViwer/linksviwer.h \
+        Sources/UI/ContentViewer/ImageViewer/imageviewer.h \
         Sources/UI/ContentViewer/ColorViewer/colorviewer.h \
+        Sources/UI/ContentViewer/LinksViewer/linkviewer.h \
+        Sources/UI/ContentViewer/LinksViewer/linksviewer.h \
         Sources/UI/Settings/settingsdialog.h \
         Sources/UI/Settings/aboutdialog.h \
         Sources/UI/Settings/creditsdialog.h \
         Sources/UI/LoaderScreen/loaderscreen.h \
         Sources/UI/WelcomeScreen/welcomescreen.h \
-        Sources/Utils/appinfos.h
+        Sources/UI/DownloadDialog/downloaddialog.h
 
 TRANSLATIONS += Translations/MiniClipBoard_fr.ts Translations/MiniClipBoard_es.ts
 
 RESOURCES += \
     rc.qrc
+
+win32 {
+    RC_FILE += \
+        win_rc.rc
+}

@@ -53,6 +53,8 @@ namespace Core
 
     QByteArray clipboardDataToByteArray(const ClipboardData &data);
     ClipboardData byteArrayToClipboardData(const QByteArray &array, QDateTime &dateTime, QString &userName);
+
+    QList<Bookmark> reorderBookmarks(const QList<Bookmark> &bookmarks);
 }
 
 #endif // CORE_H

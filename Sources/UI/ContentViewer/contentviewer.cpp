@@ -81,7 +81,7 @@ ContentViewer::ContentViewer(QWidget *parent) : QWidget(parent)
     m_headerLayout->addWidget(mw_saveButton, 1, 1, 1, 1);
     m_headerLayout->addWidget(mw_infosLabel, 1, 2, 1, 3, Qt::AlignLeft);
 
-    mw_viwer = new QWidget(this);
+    mw_viewer = new QWidget(this);
 
     mw_header->setLayout(m_headerLayout);
 }
@@ -136,10 +136,10 @@ void ContentViewer::save()
         filter = tr("Portable Network Graphics (*.png)");
         break;
     case Core::MimeType_URLs :
-        filter = ("Plain text (*.txt)");
+        filter = tr("Plain text (*.txt)");
         break;
     case Core::MimeType_Color :
-        filter = ("Plain text (*.txt)");
+        filter = tr("Plain text (*.txt)");
         break;
     default:
         return;
@@ -261,33 +261,33 @@ void ContentViewer::displayInfos()
 
 void ContentViewer::displayData()
 {
-    if(mw_viwer) {
-        delete mw_viwer;
+    if(mw_viewer) {
+        delete mw_viewer;
     }
 
     switch (m_data.type) {
     case Core::MimeType_Text :
-        mw_viwer = new TextViewer(m_data.text, this);
+        mw_viewer = new TextViewer(m_data.text, this);
         break;
     case Core::MimeType_Html :
-        mw_viwer = new HTMLViewer(m_data.Html, this);
+        mw_viewer = new HTMLViewer(m_data.Html, this);
         break;
     case Core::MimeType_Image :
-        mw_viwer = new ImageViwer(m_data.image, this);
+        mw_viewer = new ImageViewer(m_data.image, this);
         break;
     case Core::MimeType_URLs :
-        mw_viwer = new LinksViwer(m_data.URLs, this);
+        mw_viewer = new LinksViewer(m_data.URLs, this);
         break;
     case Core::MimeType_Color :
-        mw_viwer = new ColorViewer(m_data.color, this);
+        mw_viewer = new ColorViewer(m_data.color, this);
         break;
     default:
-        mw_viwer = nullptr;
+        mw_viewer = nullptr;
         return;
         break;
     }
 
-    mw_viwer->show();
+    mw_viewer->show();
 }
 
 void ContentViewer::paintEvent(QPaintEvent *event)
@@ -317,7 +317,7 @@ void ContentViewer::paintEvent(QPaintEvent *event)
 
     mw_header->setGeometry(0, 0, width(), m_headerHeight);
 
-    if(mw_viwer) {
-        mw_viwer->setGeometry(0, m_headerHeight + 1, width(), height() - m_headerHeight);
+    if(mw_viewer) {
+        mw_viewer->setGeometry(0, m_headerHeight + 1, width(), height() - m_headerHeight);
     }
 }

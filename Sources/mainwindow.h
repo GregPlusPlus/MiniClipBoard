@@ -21,7 +21,6 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #define MAINWINDOW_H
 
 #include <QWidget>
-
 #include <QMessageBox>
 
 #include <QVBoxLayout>
@@ -42,13 +41,15 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QResizeEvent>
 
-#include <QDebug>
+#include <QProcess>
+#include <QStandardPaths>
 
-#include <QMessageBox>
+#include <QDebug>
 
 #include "Core/core.h"
 #include "Core/bookmarkmanager.h"
 #include "Core/settingsmanager.h"
+#include "Core/updater.h"
 #include "UI/CoreUI/coreui.h"
 #include "UI/PopupWindow/popupwindow.h"
 #include "UI/ListWidget/container.h"
@@ -59,6 +60,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include "UI/Settings/settingsdialog.h"
 #include "UI/LoaderScreen/loaderscreen.h"
 #include "UI/WelcomeScreen/welcomescreen.h"
+#include "UI/DownloadDialog/downloaddialog.h"
 
 class MainWindow : public PopupWindow
 {
@@ -81,6 +83,8 @@ public slots:
     void widgetRemoved(QWidget *widget);
     void seeContent(DataWidget *widget);
     void showWelcomeScreen();
+    void updaterFinishedCheck(QString version, QString changelog, bool isAppLastVersion);
+    void updaterDownloadFinished();
 
 private:
     NavTab *mw_navTab;
@@ -91,23 +95,29 @@ private:
     WelcomeScreen *mw_welcome;
 
     BookmarkManager m_bookmarkManager;
-    SettingsManager *m_settingsManager;
+    SettingsManager *mp_settingsManager;
+    Updater m_updater;
+
+    QString m_bookmarksPath;
+    QString m_updaterPath;
 
     Core::ClipboardData m_currentData;
     int m_newDataCount;
 
     bool m_ignoreNextCopy;
     bool m_settingsDialogAlreadyOpen;
+    bool m_updatesAlreadyChecked;
 
 private:
     bool previousDataIsTheSame(const QMimeData *mime);
     QList<Core::Bookmark> loadBookmarks();
-    QList<Core::Bookmark> reorderBookmarks(const QList<Core::Bookmark> &bookmarks);
     void createBookmarkWidgets();
     bool askToRemoveBookMark();
     void updateDataCount();
     void applySettings();
     void updateShowThumbnails();
+    void checkForUpdates();
+    void initBookmarksDir();
 
 protected:
     void resizeEvent(QResizeEvent *event);

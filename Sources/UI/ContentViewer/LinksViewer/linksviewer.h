@@ -17,9 +17,39 @@ You should have received a copy of the GNU Lesser General Public License
 along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#ifndef APPINFOS_H
-#define APPINFOS_H
+#ifndef LINKSVIWER_H
+#define LINKSVIWER_H
 
-#define APP_VERSION "1.1"
+#include <QWidget>
 
-#endif // APPINFOS_H
+#include <QVBoxLayout>
+
+#include <QUrl>
+
+#include "../../../Core/core.h"
+#include "../../../UI/ListWidget/abstractlistedwidget.h"
+#include "../../../UI/ListWidget/container.h"
+#include "linkviewer.h"
+
+class LinksViewer : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit LinksViewer(const Core::Urls &urls, QWidget *parent = nullptr);
+
+signals:
+
+public slots:
+
+private:
+    QVBoxLayout *m_layout;
+
+    Container *mw_container;
+
+    Core::Urls m_urls;
+
+private:
+    void displayLinks();
+};
+
+#endif // LINKSVIWER_H
