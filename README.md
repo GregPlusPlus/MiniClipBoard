@@ -11,4 +11,4 @@ MiniClipBoard also features bookmarks that allows you to save your data over tim
 * [Windows x86 - ZIP](https://github.com/GregPlusPlus/MiniClipBoard/raw/master/Win_builds/release_Winx86_v1.1.zip)
 * [Windows x86 - Installer](https://github.com/GregPlusPlus/MiniClipBoard/raw/master/Win_builds/setup_MiniClipBoard_v1.1_Winx86.exe)
 ###### Nb: Windows Installer allows MiniClipBoard to start when the system boots
-### Current version: 1.1
+####### Current version: 1.1
