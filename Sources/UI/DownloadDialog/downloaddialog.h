@@ -23,6 +23,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include <QWidget>
 #include <QDialog>
 #include <QLabel>
+#include <QPushButton>
 #include <QProgressBar>
 
 #include <QGridLayout>
@@ -36,9 +37,10 @@ public:
     explicit DownloadDialog(QWidget *parent = nullptr);
 
 signals:
+    void cancelDownload();
 
 public slots:
-    void progress(qint64 received, qint64 total);
+    void setProgress(qint64 received, qint64 total);
     void downloadFinished();
     void setMessage(const QString &text);
 
@@ -47,6 +49,8 @@ private:
 
     QLabel *mw_message;
     QProgressBar *mw_progress;
+    QPushButton *mw_hide;
+    QPushButton *mw_cancel;
 };
 
 #endif // DOWNLOADDIALOG_H

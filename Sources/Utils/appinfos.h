@@ -20,6 +20,6 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef APPINFOS_H
 #define APPINFOS_H
 
-#define APP_VERSION "1.1"
+#define APP_VERSION "1.2"
 
 #endif // APPINFOS_H

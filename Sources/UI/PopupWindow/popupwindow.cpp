@@ -25,6 +25,10 @@ PopupWindow::PopupWindow(QWidget *parent)
     mw_centralWidget = nullptr;
     m_mousePressed = false;
 
+    m_drawProgress = false;
+    m_currentProgress = 0;
+    m_maxProgress = 0;
+
     qApp->setQuitOnLastWindowClosed(false);
     qApp->installEventFilter(this);
     this->installEventFilter(this);
@@ -105,6 +109,8 @@ void PopupWindow::setNotifyOpacity(float notifyOpacity)
     painter.drawRect(QRect(QPoint(0, 0), pixSize));
 
     mw_tray->setIcon(pix);
+
+    drawProgress();
 }
 
 QBitmap PopupWindow::iconMask() const
@@ -140,6 +146,26 @@ void PopupWindow::updateSizePos(const QSize &_size)
         move(availRect.width() - _size.width() + 1, availRect.height() - _size.height());
         m_side = Side_Bottom;
     }
+}
+
+void PopupWindow::setTrayProgress(int current, int max)
+{
+    m_currentProgress = current;
+    m_maxProgress = max;
+
+    drawProgress();
+}
+
+bool PopupWindow::getDrawProgress() const
+{
+    return m_drawProgress;
+}
+
+void PopupWindow::setDrawTrayProgress(bool _drawProgress)
+{
+    m_drawProgress = _drawProgress;
+
+    drawProgress();
 }
 
 QPoint PopupWindow::globalPosToLocalPos(const QPoint &mousePos)
@@ -301,6 +327,32 @@ void PopupWindow::mousePressed(const QPoint point)
         m_originalSize = size();
         m_originalPos = pos();
     }
+}
+
+void PopupWindow::drawProgress()
+{
+    QSize pixSize = m_trayIcon.availableSizes().at(0);
+    QPixmap pix = m_trayIcon.pixmap(pixSize);
+
+    if(m_drawProgress) {
+        QPainter painter(&pix);
+        painter.setBrush(QColor(255, 255, 255));
+        painter.setPen(QPen(QColor(255, 255, 255, 0), 2));
+        painter.setCompositionMode(QPainter::CompositionMode_Source);
+        painter.setRenderHint(QPainter::HighQualityAntialiasing);
+
+        int w = (float)((float)m_currentProgress / (float)m_maxProgress) * (pixSize.width() - 6);
+        int h = 8;
+
+        painter.drawRoundedRect(QRect(QPoint(0, (pixSize.height() / 2) - (h / 2)), QSize(pixSize.width(), h)), 4, 4);
+
+        h = 4;
+
+        painter.setPen(QPen(QColor(255, 255, 255, 0), 1.5));
+        painter.drawRoundedRect(QRect(QPoint(3, (pixSize.height() / 2) - (h / 2)), QSize(w, h)), 4, 4);
+    }
+
+    mw_tray->setIcon(pix);
 }
 
 QWidget *PopupWindow::centralWidget() const

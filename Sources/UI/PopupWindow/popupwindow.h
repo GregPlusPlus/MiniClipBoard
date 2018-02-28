@@ -73,6 +73,8 @@ public:
     float notifyOpacity() const;
     void setNotifyOpacity(float notifyOpacity);
 
+    bool getDrawProgress() const;
+
 signals:
     bool toggled(bool visible);
 
@@ -81,6 +83,8 @@ public slots:
     void setTrayIcon(const QIcon &icon);
     void notify();
     void updateSizePos(const QSize &_size);
+    void setDrawTrayProgress(bool _drawProgress);
+    void setTrayProgress(int current, int max);
 
 private:
     QWidget *mw_centralWidget;
@@ -100,11 +104,16 @@ private:
 
     bool m_toggled;
 
+    int m_currentProgress;
+    int m_maxProgress;
+    bool m_drawProgress;
+
 private:
     QPoint globalPosToLocalPos(const QPoint &mousePos);
     WindowEdge getEdgeFromMousePos(const QPoint &mousePos);
     void mouseMove(const QPoint &point);
     void mousePressed(const QPoint point);
+    void drawProgress();
 
 protected:
     Tray *mw_tray;

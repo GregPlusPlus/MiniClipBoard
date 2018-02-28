@@ -72,9 +72,10 @@ signals:
 public slots:
     void downloadCheckFinished();
     void downloadInstallerFinished();
+    void cancel();
 
 private:
-    QNetworkReply *m_reply;
+    QNetworkReply *m_p_reply;
     QNetworkAccessManager m_manager;
 
     QList<Version> m_versions;

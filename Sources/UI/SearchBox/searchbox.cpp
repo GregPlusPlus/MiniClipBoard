@@ -95,7 +95,7 @@ void SearchBox::buildMenu()
     mw_menu = new QMenu(tr("Search options"), this);
     mw_optionsButton->setMenu(mw_menu);
 
-    mw_menu->addAction(UtilsUI::createWidgetActionSeparator(tr("<b>┌── Filters ──┐</b>"), this));
+    mw_menu->addAction(UtilsUI::createWidgetActionSeparator(tr("<b> ── Filters ── </b>"), this));
 
     mw_group = new QActionGroup(this);
     mw_group->setExclusive(true);
@@ -174,7 +174,7 @@ void SearchBox::buildMenu()
         }
     });
 
-    mw_menu->addAction(UtilsUI::createWidgetActionSeparator(tr("<b>┌─ Date Time ─┐</b>"), this));
+    mw_menu->addAction(UtilsUI::createWidgetActionSeparator(tr("<b> ─ Date & Time ─ </b>"), this));
 
     mw_dateTimePicker = new DateTimePicker(this);
     connect(mw_dateTimePicker, &DateTimePicker::dateTimeFilterChanged, [=]() {
@@ -213,6 +213,6 @@ void SearchBox::paintEvent(QPaintEvent *event)
     mw_clearButton->move(mw_search->x() + mw_search->width() - 25,
                          mw_search->y() + mw_search->height() / 2 - 8);
 
-   mw_optionsButton->move(mw_search->x() + mw_search->width() + 5,
+    mw_optionsButton->move(mw_search->x() + mw_search->width() + 5,
                            height() / 2 - mw_optionsButton->height() / 2);
 }

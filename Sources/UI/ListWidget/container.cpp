@@ -48,7 +48,7 @@ Container::Container(QWidget *parent) : QScrollArea(parent)
     mw_shadow->setFixedHeight(30);
     mw_shadow->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     mw_shadow->setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-                             "stop:.07 transparent, stop:.9 rgb(10, 10, 20, 180));");
+                             "stop:.07 transparent, stop:.9 rgb(10, 10, 20, 160));");
     updateShadow();
 
     setWidget(mw_widget);

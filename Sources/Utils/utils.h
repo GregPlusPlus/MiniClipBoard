@@ -38,6 +38,7 @@ namespace Utils
     QString welcomeHTML();
     QString appVersion();
     QString buildOS();
+    QString executableFileSuffix();
 }
 
 #endif // UTILS_H

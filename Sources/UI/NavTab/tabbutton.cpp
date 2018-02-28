@@ -23,6 +23,7 @@ TabButton::TabButton(QWidget *parent) : QPushButton(parent)
 {
     m_index = 0;
     m_fade = 0;
+    m_mousePress = false;
 
     setAttribute(Qt::WA_TranslucentBackground);
     setFixedHeight(50);
@@ -59,6 +60,34 @@ void TabButton::setFade(int fade)
     update();
 }
 
+void TabButton::setIconNormal(const QIcon &icon)
+{
+    m_normalIcon = icon;
+}
+
+void TabButton::setIconHighlighted(const QIcon &icon)
+{
+    m_highlightedIcon = icon;
+}
+
+void TabButton::mousePressEvent(QMouseEvent *event)
+{
+    m_mousePress = true;
+
+    fadeIn(50);
+
+    QPushButton::mousePressEvent(event);
+}
+
+void TabButton::mouseReleaseEvent(QMouseEvent *event)
+{
+    m_mousePress = false;
+
+    fadeIn(50); //Not a typo
+
+    QPushButton::mouseReleaseEvent(event);
+}
+
 bool TabButton::selected() const
 {
     return m_selected;
@@ -73,12 +102,16 @@ void TabButton::setSelected(bool selected)
     } else {
         fadeOut(200);
     }
+
+    putIcon();
 }
 
 void TabButton::setSelected(bool selected, bool animated)
 {
     if(animated) {
         setSelected(selected);
+
+        return;
     } else {
         m_selected = selected;
         if(m_selected) {
@@ -87,6 +120,8 @@ void TabButton::setSelected(bool selected, bool animated)
             m_fade = 0;
         }
     }
+
+    putIcon();
 }
 
 void TabButton::paintEvent(QPaintEvent *event)
@@ -94,10 +129,12 @@ void TabButton::paintEvent(QPaintEvent *event)
     Q_UNUSED(event)
 
     QPainter painter(this);
+    if(m_mousePress) {
+        painter.setBrush(QColor(40, 40, 40, m_fade));
+    } else {
+        painter.setBrush(QColor(255, 255, 255, m_fade));
+    }
 
-    QBrush bg(QColor(255, 255, 255, m_fade));
-
-    painter.setBrush(bg);
     painter.setPen(Qt::NoPen);
 
     painter.drawRect(0, 0, width(), height());
@@ -107,6 +144,15 @@ void TabButton::paintEvent(QPaintEvent *event)
     painter.drawPixmap(width() / 2 - pixmap.width() / 2,
                        height() / 2 - pixmap.height() / 2,
                        pixmap);
+}
+
+void TabButton::putIcon()
+{
+    if(m_selected) {
+        setIcon(m_highlightedIcon);
+    } else {
+        setIcon(m_normalIcon);
+    }
 }
 
 void TabButton::fadeIn(int duration)

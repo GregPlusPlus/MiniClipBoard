@@ -1,22 +1,3 @@
-<!-- ************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
-
-This file is part of MiniClipBoard.
-
-MiniClipBoard is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-MiniClipBoard is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
-*********************************************************************** -->
-
 <RCC>
     <qresource prefix="/icons">
         <file alias="ic_content_paste_white_18dp">rc/icons/ic_content_paste_white_18dp.png</file>
@@ -46,6 +27,9 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
         <file alias="ic_save_white_18dp">rc/icons/ic_save_white_18dp.png</file>
         <file alias="skip">rc/icons/skip.png</file>
         <file alias="ic_more_vert_white_18dp">rc/icons/ic_more_vert_white_18dp.png</file>
+        <file alias="arrow_link">rc/icons/arrow_link.png</file>
+        <file alias="ic_favorite_border_white_highlighted_24dp">rc/icons/ic_favorite_border_white_highlighted_24dp.png</file>
+        <file alias="ic_content_paste_white_highlighted_24dp">rc/icons/ic_content_paste_white_highlighted_24dp.png</file>
     </qresource>
     <qresource prefix="/css">
         <file alias="app">rc/css/app.qss</file>

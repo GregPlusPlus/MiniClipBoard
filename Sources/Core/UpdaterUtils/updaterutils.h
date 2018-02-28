@@ -17,46 +17,37 @@ You should have received a copy of the GNU Lesser General Public License
 along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#ifndef BOOKMARKMANAGER_H
-#define BOOKMARKMANAGER_H
+#ifndef UPDATERUTILS_H
+#define UPDATERUTILS_H
 
 #include <QObject>
-#include <QWidget>
-
-#include <QList>
-#include <QStringList>
-
-#include <QByteArray>
-#include <QUuid>
-
-#include <QFile>
-#include <QDir>
-
-#include <QDebug>
-
-#include "core.h"
 
 #include <QMessageBox>
 
-class BookmarkManager: public QObject
+#include <QProcess>
+
+#include "../updater.h"
+#include "../../UI/DownloadDialog/downloaddialog.h"
+#include "../../Utils/utils.h"
+
+class UpdaterUtils : public QObject
 {
     Q_OBJECT
-
 public:
-    BookmarkManager();
-    QByteArray getDataFromFile(const QUuid &uuid);
-    QList<QUuid> getUuids();
-    QDir dir() const;
+    explicit UpdaterUtils(QObject *parent = nullptr);
 
-public slots :
-    bool saveDataToFile(const QByteArray &data, const QUuid &uuid);
-    bool removeFile(const QUuid &uuid);
-    void setDir(const QDir &dir);
-    void exportBookmarks(const QDir &exportDir);
-    void importBookmarks(const QDir &importDir);
+signals:
+    void progress(int current, int max, bool drawprogress);
+
+public slots:
+    void checkForUpdates();
+    void updaterFinishedCheck(QString version, QString changelog, bool isAppLastVersion);
+    void updaterDownloadFinished();
 
 private:
-    QDir m_dir;
+    Updater m_updater;
+
+    QString m_updaterPath;
 };
 
-#endif // BOOKMARKMANAGER_H
+#endif // UPDATERUTILS_H

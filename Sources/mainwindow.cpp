@@ -56,13 +56,13 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
 
         m_settingsDialogAlreadyOpen = true;
 
-        SettingsDialog *dialog = new SettingsDialog(mp_settingsManager);
+        SettingsDialog *dialog = new SettingsDialog(mp_settingsManager, &m_bookmarkManager);
         connect(dialog, &SettingsDialog::settingsChanged, [=]() {
             mp_settingsManager->save();
             applySettings();
         });
         connect(dialog, &SettingsDialog::checkForUpdates, [=]() {
-            checkForUpdates();
+            m_updaterUtils.checkForUpdates();
         });
         connect(dialog, &SettingsDialog::finished, [=](int result) {
             Q_UNUSED(result)
@@ -72,6 +72,8 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
 
         dialog->exec();
     });
+
+    connect(&m_updaterUtils, SIGNAL(progress(int,int,bool)), this, SLOT(updateProgressUpdater(int,int,bool)));
 
     initBookmarksDir();
 
@@ -84,8 +86,8 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
     mw_containerBookmarks = new DataWidgetContainer(this);
     connect(mw_containerBookmarks->getContainer(), SIGNAL(widgetRemoved(QWidget*)), this, SLOT(widgetRemoved(QWidget*)));
 
-    mw_navTab->addTab(QIcon(":/icons/ic_content_paste_white_24dp"), tr("All clipboards"), mw_container);
-    mw_navTab->addTab(QIcon(":/icons/ic_favorite_border_white_24dp"), tr("Favorites"), mw_containerBookmarks);
+    mw_navTab->addTab(QIcon(":/icons/ic_content_paste_white_24dp"), QIcon(":/icons/ic_content_paste_white_highlighted_24dp"), tr("All clipboards"), mw_container);
+    mw_navTab->addTab(QIcon(":/icons/ic_favorite_border_white_24dp"), QIcon(":/icons/ic_favorite_border_white_highlighted_24dp"), tr("Favorites"), mw_containerBookmarks);
     mw_navTab->select(0);
 
     setCentralWidget(mw_navTab);
@@ -101,6 +103,7 @@ void MainWindow::initBookmarksDir()
     if(!QDir(m_bookmarksPath).exists()) {
         QDir().mkpath(m_bookmarksPath);
     }
+
     m_bookmarkManager.setDir(QDir(m_bookmarksPath));
 }
 
@@ -253,64 +256,10 @@ void MainWindow::showWelcomeScreen()
     }
 }
 
-void MainWindow::updaterFinishedCheck(QString version, QString changelog, bool isAppLastVersion)
+void MainWindow::updateProgressUpdater(int current, int max, bool draw)
 {
-    if(isAppLastVersion) {
-        return;
-    }
-
-    QString fileSuffix;
-    if(Utils::buildOS() == "windows") {
-        fileSuffix = ".exe";
-    }
-
-    m_updaterPath = QString("MiniClipBoard_update%1").arg(fileSuffix);
-
-    QMessageBox box(QMessageBox::Question,
-                    tr("Updates available"),
-                    tr("A new version of MiniClipBoard is available.<br>New version : <i>%1</i> | Current version : <i>%2</i><br>Do you want to download and install it?").arg(version).arg(Utils::appVersion()),
-                    QMessageBox::Yes | QMessageBox::No);
-    box.setDetailedText(changelog);
-    box.exec();
-
-    if(box.standardButton(box.clickedButton()) == QMessageBox::Yes) {
-        DownloadDialog *dial = new DownloadDialog();
-        dial->setMessage(tr("Downloading file from <a href=\"%1\">%2</a> ...").arg(m_updater.getLastVersion().installerURL).arg(m_updater.getLastVersion().installerURL));
-
-        connect(&m_updater, &Updater::downloadFinished, [=]() {
-            dial->setMessage(tr("Writing file to disk..."));
-
-            QFile lastversion(m_updaterPath);
-
-            if(lastversion.open(QIODevice::WriteOnly)) {
-                lastversion.write(m_updater.getDataInstaller());
-                lastversion.close();
-
-                dial->setMessage(tr("Ready to install..."));
-
-                updaterDownloadFinished();
-            } else {
-                QMessageBox::warning(nullptr, tr("Failed to update MiniClipBoard"), tr("Unable to write file to disk.<br><i>%1</i>").arg(lastversion.errorString()));
-            }
-        });
-        //connect(&m_updater, SIGNAL(finishedDownload()), this, SLOT(updaterDownloadFinished()));
-        connect(&m_updater, SIGNAL(progress(qint64,qint64)), dial, SLOT(progress(qint64,qint64)));
-        connect(&m_updater, &Updater::error, [=](QString error) {
-            QMessageBox::warning(nullptr, tr("Updater error !"), tr("An error occured when downloading file : <br><i>%1</i>").arg(error));
-        });
-
-        m_updater.downloadNewVersion();
-        dial->show();
-    }
-}
-
-void MainWindow::updaterDownloadFinished()
-{
-    QMessageBox::information(nullptr, tr("Download completed!"), tr("MiniClipBoard will be closed to complete the installation."));
-
-    QProcess::startDetached(m_updaterPath);
-
-    qApp->exit();
+    setDrawTrayProgress(draw);
+    setTrayProgress(current, max);
 }
 
 SettingsManager *MainWindow::settingsManager() const
@@ -340,7 +289,7 @@ bool MainWindow::previousDataIsTheSame(const QMimeData *mime)
 
 QList<Core::Bookmark> MainWindow::loadBookmarks()
 {
-    QList<QUuid> uuids = m_bookmarkManager.getUUids();
+    QList<QUuid> uuids = m_bookmarkManager.getUuids();
     QList<Core::Bookmark> bookmarks;
 
     for(int i = 0; i < uuids.count(); i++) {
@@ -411,7 +360,7 @@ void MainWindow::applySettings()
     updateShowThumbnails();
 
     if(mp_settingsManager->settings()->autoCheckUpdates && !m_updatesAlreadyChecked) {
-        checkForUpdates();
+        m_updaterUtils.checkForUpdates();
         m_updatesAlreadyChecked = true;
     }
 }
@@ -428,13 +377,6 @@ void MainWindow::updateShowThumbnails()
 
         w->setShowThumbnails(mp_settingsManager->settings()->showThumbnails);
     }
-}
-
-void MainWindow::checkForUpdates()
-{
-    disconnect(&m_updater, SIGNAL(finishedCheck(QString,QString,bool)), this, SLOT(updaterFinishedCheck(QString,QString,bool)));
-    connect(&m_updater, SIGNAL(finishedCheck(QString,QString,bool)), this, SLOT(updaterFinishedCheck(QString,QString,bool)));
-    m_updater.checkForUpdates();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

@@ -39,31 +39,21 @@ NavTab::NavTab(QWidget *parent) : QWidget(parent)
     setLayout(m_mainLayout);
 }
 
-void NavTab::addTab(const QIcon &icon, const QString &tooltipText, QWidget *widget)
+void NavTab::addTab(const QIcon &normalIcon, const QIcon &highlightedIcon, const QString &tooltipText, QWidget *widget)
 {
-    TabButton *button = new TabButton(this);
-    button->setIcon(icon);
-    button->setToolTip(tooltipText);
-    button->setFlat(true);
-    button->setIndex(m_tabs.count());
-    connect(button, SIGNAL(buttonSelected(int)), this, SLOT(select(int)));
-
-    Tab tab(button, widget, m_tabs.count());
-
-    m_tabs.append(tab);
-
-    m_tabslayout->addWidget(button);
-    mw_stack->addWidget(widget);
-
-    select(m_tabs.count() - 1);
-
-    m_currentTab = tab;
+    addButton(normalIcon, highlightedIcon, widget)->setToolTip(tooltipText);
 }
 
-void NavTab::addTab(const QIcon &icon, QWidget *widget)
+void NavTab::addTab(const QIcon &normalIcon, const QIcon &highlightedIcon, QWidget *widget)
+{
+    addButton(normalIcon, highlightedIcon, widget);
+}
+
+TabButton *NavTab::addButton(const QIcon &normalIcon, const QIcon &highlightedIcon, QWidget *widget)
 {
     TabButton *button = new TabButton(this);
-    button->setIcon(icon);
+    button->setIconNormal(normalIcon);
+    button->setIconHighlighted(highlightedIcon);
     button->setFlat(true);
     button->setIndex(m_tabs.count());
     connect(button, SIGNAL(buttonSelected(int)), this, SLOT(select(int)));
@@ -78,6 +68,8 @@ void NavTab::addTab(const QIcon &icon, QWidget *widget)
     select(m_tabs.count() - 1);
 
     m_currentTab = tab;
+
+    return button;
 }
 
 void NavTab::select(int index)

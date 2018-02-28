@@ -19,7 +19,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "bookmarkmanager.h"
 
-BookmarkManager::BookmarkManager()
+BookmarkManager::BookmarkManager() : QObject()
 {
 
 }
@@ -27,8 +27,6 @@ BookmarkManager::BookmarkManager()
 bool BookmarkManager::saveDataToFile(const QByteArray &data, const QUuid &uuid)
 {
     QString path = QString("%1/%2").arg(m_dir.absolutePath()).arg(uuid.toString());
-
-    qDebug() << path;
 
     QFile file(path);
     if(!file.open(QIODevice::WriteOnly)) {
@@ -59,7 +57,7 @@ bool BookmarkManager::removeFile(const QUuid &uuid)
     return file.remove();
 }
 
-QList<QUuid> BookmarkManager::getUUids()
+QList<QUuid> BookmarkManager::getUuids()
 {
     QList<QUuid> list;
 
@@ -84,4 +82,24 @@ QDir BookmarkManager::dir() const
 void BookmarkManager::setDir(const QDir &dir)
 {
     m_dir = dir;
+}
+
+void BookmarkManager::exportBookmarks(const QDir &exportDir)
+{
+    QList<QUuid> Uuids = getUuids();
+
+    for(int i = 0; i < Uuids.count(); i++) {
+        QFile::copy(dir().absolutePath() + "/" + Uuids.at(i).toString(),
+                    exportDir.absolutePath() + "/" + Uuids.at(i).toString());
+    }
+}
+
+void BookmarkManager::importBookmarks(const QDir &importDir)
+{
+    QStringList files = importDir.entryList(QDir::Files);
+
+    for(int i = 0; i < files.count(); i++) {
+        QFile::copy(importDir.absolutePath() + "/" + files.at(i),
+                    dir().absolutePath() + "/" + files.at(i));
+    }
 }

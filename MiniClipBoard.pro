@@ -49,6 +49,7 @@ SOURCES += \
         Sources/Core/bookmarkmanager.cpp \
         Sources/Core/settingsmanager.cpp \
         Sources/Core/updater.cpp \
+        Sources/Core/UpdaterUtils/updaterutils.cpp \
         Sources/Utils/utils.cpp \
         Sources/UI/UtilsUI/utilsui.cpp \
         Sources/UI/ListWidget/container.cpp \
@@ -85,6 +86,7 @@ HEADERS += \
         Sources/Core/bookmarkmanager.h \
         Sources/Core/settingsmanager.h \
         Sources/Core/updater.h \
+        Sources/Core/UpdaterUtils/updaterutils.h \
         Sources/Utils/legal.h \
         Sources/Utils/appinfos.h \
         Sources/Utils/utils.h \
@@ -122,6 +124,8 @@ RESOURCES += \
     rc.qrc
 
 win32 {
+    OTHER_FILES += \
+        win_rc.rc
     RC_FILE += \
         win_rc.rc
 }

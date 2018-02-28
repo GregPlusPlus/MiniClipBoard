@@ -21,32 +21,31 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 Updater::Updater() : QObject()
 {
-
+    m_p_reply = nullptr;
 }
 
 void Updater::checkForUpdates()
 {
-    m_reply = m_manager.get(QNetworkRequest(QUrl(Updater::versionsURL())));
+    m_p_reply = m_manager.get(QNetworkRequest(QUrl(Updater::versionsURL())));
 
-    connect(m_reply, SIGNAL(finished()), this, SLOT(downloadCheckFinished()));
-    connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SIGNAL(progress(qint64,qint64)));
-    connect(m_reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](QNetworkReply::NetworkError code) {
+    connect(m_p_reply, SIGNAL(finished()), this, SLOT(downloadCheckFinished()));
+    connect(m_p_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SIGNAL(progress(qint64,qint64)));
+    connect(m_p_reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](QNetworkReply::NetworkError code) {
         Q_UNUSED(code)
-        emit error(m_reply->errorString());
+        emit error(m_p_reply->errorString());
     });
 }
 
 void Updater::downloadNewVersion()
 {
-    m_reply = m_manager.get(QNetworkRequest(QUrl(m_last.installerURL)));
+    m_p_reply = m_manager.get(QNetworkRequest(QUrl(m_last.installerURL)));
 
-    disconnect(m_reply, SIGNAL(finished()), this, SLOT(downloadCheckFinished()));
-    connect(m_reply, SIGNAL(finished()), this, SLOT(downloadInstallerFinished()));
-    connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SIGNAL(progress(qint64,qint64)));
-    connect(m_reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](QNetworkReply::NetworkError code) {
+    disconnect(m_p_reply, SIGNAL(finished()), this, SLOT(downloadCheckFinished()));
+    connect(m_p_reply, SIGNAL(finished()), this, SLOT(downloadInstallerFinished()));
+    connect(m_p_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SIGNAL(progress(qint64,qint64)));
+    connect(m_p_reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [=](QNetworkReply::NetworkError code) {
         Q_UNUSED(code)
-        qDebug() << m_reply->errorString();
-        emit error(m_reply->errorString());
+        emit error(m_p_reply->errorString());
     });
 }
 
@@ -58,9 +57,9 @@ QString Updater::versionsURL()
 
 void Updater::downloadCheckFinished()
 {
-    m_reply->deleteLater();
+    m_p_reply->deleteLater();
 
-    extractVersions(m_reply->readAll());
+    extractVersions(m_p_reply->readAll());
 
     m_last = extractLastVersion();
 
@@ -69,11 +68,21 @@ void Updater::downloadCheckFinished()
 
 void Updater::downloadInstallerFinished()
 {
-    m_reply->deleteLater();
+    m_p_reply->deleteLater();
 
-    m_dataInstaller = m_reply->readAll();
+    m_dataInstaller = m_p_reply->readAll();
 
     emit downloadFinished();
+}
+
+void Updater::cancel()
+{
+    if(!m_p_reply) {
+        return;
+    }
+
+    disconnect(m_p_reply, SIGNAL(finished()), this, SLOT(downloadInstallerFinished()));
+    disconnect(m_p_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SIGNAL(progress(qint64,qint64)));
 }
 
 Updater::Version Updater::getLastVersion() const

@@ -19,7 +19,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "settingsdialog.h"
 
-SettingsDialog::SettingsDialog(SettingsManager *manager, QWidget *parent) : QDialog(parent), m_manager(manager)
+SettingsDialog::SettingsDialog(SettingsManager *settingsManager, BookmarkManager *bmManager, QWidget *parent) : QDialog(parent), m_settingsManager(settingsManager), m_bmManager(bmManager)
 {
     setWindowIcon(QIcon(":/icons/ic_help_outline_white_18dp"));
     this->setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -31,9 +31,9 @@ SettingsDialog::SettingsDialog(SettingsManager *manager, QWidget *parent) : QDia
     m_layout = new QVBoxLayout;
     m_layout->setMargin(10);
 
-    mw_reinterpretGroupBox = new QGroupBox(tr("Reinterpret data"), this);
+    mw_reinterpretGroup = new QGroupBox(tr("Reinterpret data"), this);
     m_reinterpretLayout = new QVBoxLayout;
-    mw_reinterpretGroupBox->setLayout(m_reinterpretLayout);
+    mw_reinterpretGroup->setLayout(m_reinterpretLayout);
 
     mw_reinterpretUrl = new QCheckBox(tr("Reinterpret text as URL"), this);
     mw_reinterpretColor = new QCheckBox(tr("Reinterpret text as color"), this);
@@ -47,9 +47,9 @@ SettingsDialog::SettingsDialog(SettingsManager *manager, QWidget *parent) : QDia
 
     mw_alwaysOnTop = new QCheckBox(tr("Window always on top"), this);
 
-    mw_langGroupBox = new QGroupBox(tr("Language"), this);
+    mw_langGroup = new QGroupBox(tr("Language"), this);
     m_langLayout = new QHBoxLayout;
-    mw_langGroupBox->setLayout(m_langLayout);
+    mw_langGroup->setLayout(m_langLayout);
 
     mw_lang = new QComboBox(this);
     mw_lang->addItem("AUTO");
@@ -68,6 +68,23 @@ SettingsDialog::SettingsDialog(SettingsManager *manager, QWidget *parent) : QDia
 
     m_langLayout->addWidget(mw_lang);
     m_langLayout->addWidget(mw_infoLang);
+
+    mw_bookmarksGroup = new QGroupBox(tr("Bookmarks"), this);
+    m_bookmarksLayout = new QVBoxLayout;
+
+    mw_exportBookmarks = new QPushButton(tr("Export bookmarks"));
+    mw_importBookmarks = new QPushButton(tr("Import bookmarks"));
+    mw_bmPath = new QLineEdit(m_bmManager->dir().absolutePath(), this);
+    mw_bmPath->setReadOnly(true);
+    mw_bmPath->setStyleSheet("border: none;"
+                             "background: rgba(20, 20, 20, 120);");
+
+    m_bookmarksLayout->addWidget(mw_exportBookmarks);
+    m_bookmarksLayout->addWidget(mw_importBookmarks);
+    m_bookmarksLayout->addWidget(new QLabel(tr("Bookmarks directory :"), this));
+    m_bookmarksLayout->addWidget(mw_bmPath);
+
+    mw_bookmarksGroup->setLayout(m_bookmarksLayout);
 
     mw_updatesGroup = new QGroupBox(tr("Updates"), this);
     m_updatesLayout = new QVBoxLayout;
@@ -101,11 +118,12 @@ SettingsDialog::SettingsDialog(SettingsManager *manager, QWidget *parent) : QDia
     m_legalInfoslayout->addWidget(mw_aboutButton);
     m_legalInfoslayout->addWidget(mw_creditsButton);
 
-    m_layout->addWidget(mw_reinterpretGroupBox);
+    m_layout->addWidget(mw_reinterpretGroup);
     m_layout->addWidget(mw_notify);
     m_layout->addWidget(mw_showThumbnails);
     m_layout->addWidget(mw_alwaysOnTop);
-    m_layout->addWidget(mw_langGroupBox);
+    m_layout->addWidget(mw_langGroup);
+    m_layout->addWidget(mw_bookmarksGroup);
     m_layout->addWidget(mw_updatesGroup);
     m_layout->addWidget(UtilsUI::createSeparator());
     m_layout->addWidget(mw_legalInfosGroup);
@@ -128,53 +146,55 @@ SettingsDialog::SettingsDialog(SettingsManager *manager, QWidget *parent) : QDia
     connect(mw_alwaysOnTop, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
     connect(mw_autoUpdates, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
     connect(mw_lang, SIGNAL(activated(QString)), this, SLOT(settingsUIChanged()));
+    connect(mw_exportBookmarks, SIGNAL(clicked(bool)), this, SLOT(exportBookmarks()));
+    connect(mw_importBookmarks, SIGNAL(clicked(bool)), this, SLOT(importBookmarks()));
 }
 
 void SettingsDialog::initUISettings()
 {
-    if((m_manager->settings()->reinterpret & Core::ReinterpretData_TextToUrl) != 0) {
+    if((m_settingsManager->settings()->reinterpret & Core::ReinterpretData_TextToUrl) != 0) {
         mw_reinterpretUrl->setChecked(true);
     }
 
-    if((m_manager->settings()->reinterpret & Core::ReinterpretData_TextToColor) != 0) {
+    if((m_settingsManager->settings()->reinterpret & Core::ReinterpretData_TextToColor) != 0) {
         mw_reinterpretColor->setChecked(true);
     }
 
-    mw_notify->setChecked(m_manager->settings()->notify);
-    mw_showThumbnails->setChecked(m_manager->settings()->showThumbnails);
-    mw_alwaysOnTop->setChecked(m_manager->settings()->windowAlwaysOnTop);
-    mw_autoUpdates->setChecked(m_manager->settings()->autoCheckUpdates);
+    mw_notify->setChecked(m_settingsManager->settings()->notify);
+    mw_showThumbnails->setChecked(m_settingsManager->settings()->showThumbnails);
+    mw_alwaysOnTop->setChecked(m_settingsManager->settings()->windowAlwaysOnTop);
+    mw_autoUpdates->setChecked(m_settingsManager->settings()->autoCheckUpdates);
 
     mw_lang->addItems(SettingsManager::availableLanguages("Translations"));
-    mw_lang->setCurrentText(m_manager->settings()->lang);
+    mw_lang->setCurrentText(m_settingsManager->settings()->lang);
 }
 
 void SettingsDialog::saveSettings()
 {
-    m_manager->settings()->reinterpret = Core::ReinterpretData_None;
+    m_settingsManager->settings()->reinterpret = Core::ReinterpretData_None;
 
     if(mw_reinterpretUrl->isChecked()) {
-        m_manager->settings()->reinterpret |= Core::ReinterpretData_TextToUrl;
+        m_settingsManager->settings()->reinterpret |= Core::ReinterpretData_TextToUrl;
     }
 
     if(mw_reinterpretColor->isChecked()) {
-        m_manager->settings()->reinterpret |= Core::ReinterpretData_TextToColor;
+        m_settingsManager->settings()->reinterpret |= Core::ReinterpretData_TextToColor;
     }
 
-    m_manager->settings()->notify = mw_notify->isChecked();
-    m_manager->settings()->showThumbnails = mw_showThumbnails->isChecked();
-    m_manager->settings()->windowAlwaysOnTop = mw_alwaysOnTop->isChecked();
-    m_manager->settings()->autoCheckUpdates = mw_autoUpdates->isChecked();
+    m_settingsManager->settings()->notify = mw_notify->isChecked();
+    m_settingsManager->settings()->showThumbnails = mw_showThumbnails->isChecked();
+    m_settingsManager->settings()->windowAlwaysOnTop = mw_alwaysOnTop->isChecked();
+    m_settingsManager->settings()->autoCheckUpdates = mw_autoUpdates->isChecked();
 
-    m_manager->settings()->lang = mw_lang->currentText();
+    m_settingsManager->settings()->lang = mw_lang->currentText();
 
-    m_manager->save();
+    m_settingsManager->save();
 }
 
 void SettingsDialog::showAppInfos()
 {
     QLabel *label = new QLabel(this);
-    label->setText(tr("MiniClipBoard V%1 %2").arg(Utils::appVersion()).arg(m_manager->lang()));
+    label->setText(tr("MiniClipBoard V%1 %2").arg(Utils::appVersion()).arg(m_settingsManager->lang()));
     label->setStyleSheet("padding-right: 10px;");
 
     mw_statusBar->addPermanentWidget(label);
@@ -182,12 +202,12 @@ void SettingsDialog::showAppInfos()
 
 SettingsManager *SettingsDialog::manager() const
 {
-    return m_manager;
+    return m_settingsManager;
 }
 
 void SettingsDialog::setManager(SettingsManager *manager)
 {
-    m_manager = manager;
+    m_settingsManager = manager;
 }
 
 void SettingsDialog::settingsUIChanged()
@@ -202,3 +222,22 @@ void SettingsDialog::settingsUIChanged()
     watcher->setFuture(future);
 }
 
+void SettingsDialog::exportBookmarks()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Export to ... - Select directory"),
+                                                    QString(),
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
+
+    m_bmManager->exportBookmarks(QDir(dir));
+}
+
+void SettingsDialog::importBookmarks()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Import from ... - Select directory"),
+                                                    QString(),
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
+
+    m_bmManager->importBookmarks(QDir(dir));
+}

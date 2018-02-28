@@ -112,3 +112,12 @@ return QLatin1String("unix");
 return QLatin1String("unknown");
 #endif
 }
+
+QString Utils::executableFileSuffix()
+{
+    if(buildOS() == "windows") {
+        return ".exe";
+    }
+
+    return "";
+}

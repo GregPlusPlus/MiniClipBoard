@@ -26,6 +26,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include <QComboBox>
 #include <QPushButton>
 #include <QGroupBox>
+#include <QLineEdit>
 #include <QStatusBar>
 
 #include <QVBoxLayout>
@@ -33,6 +34,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include <QGridLayout>
 
 #include <QDialog>
+#include <QFileDialog>
 #include <QMessageBox>
 
 #include <QIcon>
@@ -43,6 +45,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../../Core/core.h"
 #include "../../Core/settingsmanager.h"
+#include "../../Core/bookmarkmanager.h"
 #include "../../Utils/utils.h"
 #include "../UtilsUI/utilsui.h"
 #include "aboutdialog.h"
@@ -53,7 +56,7 @@ class SettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SettingsDialog(SettingsManager *manager, QWidget *parent = nullptr);
+    explicit SettingsDialog(SettingsManager *settingsManager, BookmarkManager *bmManager, QWidget *parent = nullptr);
 
     SettingsManager *manager() const;
     void setManager(SettingsManager *manager);
@@ -64,6 +67,8 @@ signals:
 
 public slots:
     void settingsUIChanged();
+    void exportBookmarks();
+    void importBookmarks();
 
 private:
     QVBoxLayout *m_mainLayout;
@@ -71,11 +76,13 @@ private:
     QVBoxLayout *m_reinterpretLayout;
     QHBoxLayout *m_langLayout;
     QVBoxLayout *m_updatesLayout;
+    QVBoxLayout *m_bookmarksLayout;
     QVBoxLayout *m_legalInfoslayout;
 
-    QGroupBox *mw_reinterpretGroupBox;
-    QGroupBox *mw_langGroupBox;
+    QGroupBox *mw_reinterpretGroup;
+    QGroupBox *mw_langGroup;
     QGroupBox *mw_updatesGroup;
+    QGroupBox *mw_bookmarksGroup;
     QGroupBox *mw_legalInfosGroup;
 
     QCheckBox *mw_reinterpretUrl;
@@ -88,13 +95,18 @@ private:
     QComboBox *mw_lang;
     QPushButton *mw_infoLang;
 
+    QPushButton *mw_exportBookmarks;
+    QPushButton *mw_importBookmarks;
     QPushButton *mw_checkForUpdates;
     QPushButton *mw_aboutButton;
     QPushButton *mw_creditsButton;
 
+    QLineEdit *mw_bmPath;
+
     QStatusBar *mw_statusBar;
 
-    SettingsManager *m_manager;
+    SettingsManager *m_settingsManager;
+    BookmarkManager *m_bmManager;
 
 private:
     void initUISettings();

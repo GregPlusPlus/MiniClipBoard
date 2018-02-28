@@ -41,7 +41,6 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QResizeEvent>
 
-#include <QProcess>
 #include <QStandardPaths>
 
 #include <QDebug>
@@ -49,7 +48,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include "Core/core.h"
 #include "Core/bookmarkmanager.h"
 #include "Core/settingsmanager.h"
-#include "Core/updater.h"
+#include "Core/UpdaterUtils/updaterutils.h"
 #include "UI/CoreUI/coreui.h"
 #include "UI/PopupWindow/popupwindow.h"
 #include "UI/ListWidget/container.h"
@@ -60,7 +59,6 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include "UI/Settings/settingsdialog.h"
 #include "UI/LoaderScreen/loaderscreen.h"
 #include "UI/WelcomeScreen/welcomescreen.h"
-#include "UI/DownloadDialog/downloaddialog.h"
 
 class MainWindow : public PopupWindow
 {
@@ -83,8 +81,7 @@ public slots:
     void widgetRemoved(QWidget *widget);
     void seeContent(DataWidget *widget);
     void showWelcomeScreen();
-    void updaterFinishedCheck(QString version, QString changelog, bool isAppLastVersion);
-    void updaterDownloadFinished();
+    void updateProgressUpdater(int current, int max, bool draw);
 
 private:
     NavTab *mw_navTab;
@@ -96,10 +93,10 @@ private:
 
     BookmarkManager m_bookmarkManager;
     SettingsManager *mp_settingsManager;
-    Updater m_updater;
+
+    UpdaterUtils m_updaterUtils;
 
     QString m_bookmarksPath;
-    QString m_updaterPath;
 
     Core::ClipboardData m_currentData;
     int m_newDataCount;
@@ -116,7 +113,6 @@ private:
     void updateDataCount();
     void applySettings();
     void updateShowThumbnails();
-    void checkForUpdates();
     void initBookmarksDir();
 
 protected:

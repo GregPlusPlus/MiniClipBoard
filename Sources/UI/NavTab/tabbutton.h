@@ -54,16 +54,25 @@ signals:
     void buttonSelected(int index);
 
 public slots:
+    void setIconNormal(const QIcon &icon);
+    void setIconHighlighted(const QIcon &icon);
 
 private:
     int m_index;
 
     bool m_selected;
+    bool m_mousePress;
 
     int m_fade;
 
+    QIcon m_normalIcon;
+    QIcon m_highlightedIcon;
+
 protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
+    void putIcon();
 
     void fadeIn(int duration);
     void fadeOut(int duration);

@@ -54,8 +54,8 @@ public:
 signals:
 
 public slots:
-    void addTab(const QIcon &icon, const QString &tooltipText, QWidget *widget);
-    void addTab(const QIcon &icon, QWidget *widget);
+    void addTab(const QIcon &normalIcon, const QIcon &highlightedIcon, const QString &tooltipText, QWidget *widget);
+    void addTab(const QIcon &normalIcon, const QIcon &highlightedIcon, QWidget *widget);
     void select(int index);
 
 private:
@@ -66,6 +66,9 @@ private:
 
     QList<Tab> m_tabs;
     Tab m_currentTab;
+
+private :
+    TabButton *addButton(const QIcon &normalIcon, const QIcon &highlightedIcon, QWidget *widget);
 };
 
 #endif // NAVTAB_H
