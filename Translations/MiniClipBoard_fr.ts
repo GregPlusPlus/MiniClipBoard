@@ -173,12 +173,12 @@
     <message>
         <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="39"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher</translation>
     </message>
     <message>
         <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="43"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
@@ -214,92 +214,71 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="87"/>
+        <location filename="../Sources/mainwindow.cpp" line="89"/>
         <source>All clipboards</source>
         <translation>Toutes les données copiées</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="88"/>
+        <location filename="../Sources/mainwindow.cpp" line="90"/>
         <source>Favorites</source>
         <translation>Favoris</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="270"/>
         <source>Updates available</source>
-        <translation>Des mises à jour sont disponibles</translation>
+        <translation type="vanished">Des mises à jour sont disponibles</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="271"/>
         <source>A new version of MiniClipBoard is available.&lt;br&gt;New version : &lt;i&gt;%1&lt;/i&gt; | Current version : &lt;i&gt;%2&lt;/i&gt;&lt;br&gt;Do you want to download and install it?</source>
-        <translation>Une nouvelle version de MiniClipBoard est disponible. &lt;br&gt;Nouvelle version: &lt;i&gt;%1&lt;/i&gt; | Version actuelle : &lt;i&gt;%2&lt;/i&gt;Voulez-vous la télécharger et l&apos;installer maintenant?</translation>
+        <translation type="vanished">Une nouvelle version de MiniClipBoard est disponible. &lt;br&gt;Nouvelle version: &lt;i&gt;%1&lt;/i&gt; | Version actuelle : &lt;i&gt;%2&lt;/i&gt;Voulez-vous la télécharger et l&apos;installer maintenant?</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="278"/>
         <source>Downloading file from &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</source>
-        <translation>Téléchargement du fichier depuis &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</translation>
+        <translation type="vanished">Téléchargement du fichier depuis &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="284"/>
-        <source>Download canceled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../Sources/mainwindow.cpp" line="284"/>
-        <source>Download canceled !</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../Sources/mainwindow.cpp" line="287"/>
         <source>Writing file to disk...</source>
-        <translation>Ecriture du fichier sur le disque...</translation>
+        <translation type="vanished">Ecriture du fichier sur le disque...</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="295"/>
         <source>Ready to install...</source>
-        <translation>Prêt à installer...</translation>
+        <translation type="vanished">Prêt à installer...</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="299"/>
         <source>Failed to update MiniClipBoard</source>
-        <translation>Impossible de mettre à jour MiniClipBoard</translation>
+        <translation type="vanished">Impossible de mettre à jour MiniClipBoard</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="299"/>
         <source>Unable to write file to disk.&lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Impossible d&apos;écrire le fichier sur le disque.&lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</translation>
+        <translation type="vanished">Impossible d&apos;écrire le fichier sur le disque.&lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="311"/>
         <source>Updater error !</source>
-        <translation>Erreur durant la mise à jour!</translation>
+        <translation type="vanished">Erreur durant la mise à jour!</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="311"/>
         <source>An error occured when downloading file : &lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</source>
-        <translation>Une erreur s&apos;est produite pendant le téléchargement du fichier : &lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</translation>
+        <translation type="vanished">Une erreur s&apos;est produite pendant le téléchargement du fichier : &lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="323"/>
         <source>Download completed!</source>
-        <translation>Téléchargement terminé!</translation>
+        <translation type="vanished">Téléchargement terminé!</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="323"/>
         <source>MiniClipBoard will be closed to complete the installation.</source>
-        <translation>MiniClipBoard va être fermé pour terminer l&apos;installation.</translation>
+        <translation type="vanished">MiniClipBoard va être fermé pour terminer l&apos;installation.</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="406"/>
+        <location filename="../Sources/mainwindow.cpp" line="341"/>
         <source>MiniClipBoard</source>
         <translation>MiniClipBoard</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="408"/>
+        <location filename="../Sources/mainwindow.cpp" line="343"/>
         <source>MiniClipBoard - 1 new</source>
         <translation>MiniClipBoard - 1 nouveau</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="410"/>
+        <location filename="../Sources/mainwindow.cpp" line="345"/>
         <source>MiniClipBoard - %1 news</source>
         <translation>MiniClipBoard - %1 nouveaux</translation>
     </message>
@@ -333,9 +312,13 @@
         <translation type="vanished">&lt;b&gt;┌─ Filtres ─┐&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/SearchBox/searchbox.cpp" line="98"/>
         <source>&lt;b&gt;┌── Filters ──┐&lt;/b&gt;</source>
-        <translation>&lt;b&gt;┌── Filtres ──┐&lt;/b&gt;</translation>
+        <translation type="vanished">&lt;b&gt;┌── Filtres ──┐&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/SearchBox/searchbox.cpp" line="98"/>
+        <source>&lt;b&gt; ── Filters ── &lt;/b&gt;</source>
+        <translation>&lt;b&gt; ── Filtres ── &lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../Sources/UI/SearchBox/searchbox.cpp" line="103"/>
@@ -369,8 +352,12 @@
     </message>
     <message>
         <location filename="../Sources/UI/SearchBox/searchbox.cpp" line="177"/>
+        <source>&lt;b&gt; ─ Date &amp; Time ─ &lt;/b&gt;</source>
+        <translation>&lt;b&gt; ─ Date &amp; Heure ─ &lt;/b&gt;</translation>
+    </message>
+    <message>
         <source>&lt;b&gt;┌─ Date Time ─┐&lt;/b&gt;</source>
-        <translation>&lt;b&gt;┌─ Date &amp; Heure ─┐&lt;/b&gt;</translation>
+        <translation type="vanished">&lt;b&gt;┌─ Date &amp; Heure ─┐&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -423,38 +410,68 @@
     </message>
     <message>
         <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="72"/>
+        <source>Bookmarks</source>
+        <translation>Favoris</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="75"/>
+        <source>Export bookmarks</source>
+        <translation>Exporter les favoris</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="76"/>
+        <source>Import bookmarks</source>
+        <translation>Importer les favoris</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="84"/>
+        <source>Bookmarks directory :</source>
+        <translation>Dossier des favoris :</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="89"/>
         <source>Updates</source>
         <translation>Mises à jour</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="75"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="92"/>
         <source>Auto check updates</source>
-        <translation type="unfinished">Vérifier les mises à jour automatiquement</translation>
+        <translation>Vérifier les mises à jour automatiquement</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="77"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="94"/>
         <source>Check for updates</source>
         <translation>Vérifier les mises à jour</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="85"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="102"/>
         <source>Legal informations</source>
         <translation>Informations légales</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="89"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="106"/>
         <source>About MiniClipBoard...</source>
         <translation>A propos de MiniClipBoard...</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="95"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="112"/>
         <source>Credits</source>
         <translation>Crédits</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="177"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="197"/>
         <source>MiniClipBoard V%1 %2</source>
         <translation>MiniClipBoard V%1 %2</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="227"/>
+        <source>Export to ... - Select directory</source>
+        <translation>Exporter vers ... - Sélectionner un dossier</translation>
+    </message>
+    <message>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="237"/>
+        <source>Import from ... - Select directory</source>
+        <translation>Importer vers ... - Sélectionner un dossier</translation>
     </message>
     <message>
         <source>MiniClipBoard %1 %2</source>
@@ -502,6 +519,89 @@
 %2</source>
         <translation>Publiée le %1.
 %2</translation>
+    </message>
+</context>
+<context>
+    <name>UpdaterUtils</name>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="45"/>
+        <source>Updates available</source>
+        <translation>Des mises à jour sont disponibles</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="46"/>
+        <source>A new version of MiniClipBoard is available.&lt;br&gt;New version : &lt;i&gt;%1&lt;/i&gt; | Current version : &lt;i&gt;%2&lt;/i&gt;&lt;br&gt;Do you want to download and install it?</source>
+        <translation>Une nouvelle version de MiniClipBoard est disponible. &lt;br&gt;Nouvelle version: &lt;i&gt;%1&lt;/i&gt; | Version actuelle : &lt;i&gt;%2&lt;/i&gt;Voulez-vous la télécharger et l&apos;installer maintenant?</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="53"/>
+        <source>Connecting to &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="59"/>
+        <source>Download canceled</source>
+        <translation>Téléchargement annulé</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="59"/>
+        <source>Download canceled !</source>
+        <translation>Téléchargement annulé !</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="62"/>
+        <source>Writing file to disk...</source>
+        <translation>Ecriture du fichier sur le disque...</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="70"/>
+        <source>Ready to install...</source>
+        <translation>Prêt à installer...</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="76"/>
+        <source>Failed to update MiniClipBoard</source>
+        <translation>Impossible de mettre à jour MiniClipBoard</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="76"/>
+        <source>Unable to write file to disk.&lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</source>
+        <translation>Impossible d&apos;écrire le fichier sur le disque.&lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="82"/>
+        <source>Downloading file from &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</source>
+        <translation>Téléchargement du fichier depuis &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="89"/>
+        <source>Updater error !</source>
+        <translation>Erreur durant la mise à jour!</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="89"/>
+        <source>An error occured when downloading file : &lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</source>
+        <translation>Une erreur s&apos;est produite pendant le téléchargement du fichier : &lt;br&gt;&lt;i&gt;%1&lt;/i&gt;</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="101"/>
+        <source>Download completed!</source>
+        <translation>Téléchargement terminé!</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="102"/>
+        <source>MiniClipBoard must be closed to complete the installation.&lt;br&gt;Do you want to close MiniClipBoard ?&lt;br&gt;If not, the installation will be canceled.</source>
+        <translation>MiniClipBoard doit-être fermé pour effectuer la mise à jour.&lt;br&gt;Voulez-vous fermer MiniClipBoard ?&lt;br&gt;Sinon, l&apos;installation sera annulée.</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="110"/>
+        <source>Installation canceled</source>
+        <translation>Installation annulée</translation>
+    </message>
+    <message>
+        <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="110"/>
+        <source>Installation canceled !</source>
+        <translation>Installation annulée !</translation>
     </message>
 </context>
 <context>
