@@ -24,6 +24,8 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QMessageBox>
 
+#include <QDir>
+
 #include <QProcess>
 
 #include "../updater.h"
@@ -35,6 +37,9 @@ class UpdaterUtils : public QObject
     Q_OBJECT
 public:
     explicit UpdaterUtils(QObject *parent = nullptr);
+
+    QDir dir() const;
+    void setDir(const QDir &dir);
 
 signals:
     void progress(int current, int max, bool drawprogress);
@@ -48,6 +53,8 @@ private:
     Updater m_updater;
 
     QString m_updaterPath;
+
+    QDir m_dir;
 };
 
 #endif // UPDATERUTILS_H

@@ -22,6 +22,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 DownloadDialog::DownloadDialog(QWidget *parent) : QDialog(parent)
 {
     setWindowFlags(Qt::WindowTitleHint | Qt::SubWindow | Qt::WindowStaysOnTopHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     setWindowTitle(tr("Downloading file..."));
 

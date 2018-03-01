@@ -39,7 +39,7 @@ void UpdaterUtils::updaterFinishedCheck(QString version, QString changelog, bool
 
     QString fileSuffix = Utils::executableFileSuffix();
 
-    m_updaterPath = QString("MiniClipBoard_update%1").arg(fileSuffix);
+    m_updaterPath = m_dir.absolutePath() + QString("/MiniClipBoard_update%1").arg(fileSuffix);
 
     QMessageBox box(QMessageBox::Question,
                     tr("Updates available"),
@@ -50,7 +50,7 @@ void UpdaterUtils::updaterFinishedCheck(QString version, QString changelog, bool
 
     if(box.standardButton(box.clickedButton()) == QMessageBox::Yes) {
         DownloadDialog *dial = new DownloadDialog();
-        dial->setMessage(tr("Connecting to <a href=\"%1\">%2</a> ...").arg(m_updater.getLastVersion().installerURL).arg(m_updater.getLastVersion().installerURL));
+        dial->setMessage(tr("Connecting to <a style=\"color: #93CEFF;\" href=\"%1\">%2</a> ...").arg(m_updater.getLastVersion().installerURL).arg(m_updater.getLastVersion().installerURL));
 
         connect(dial, &DownloadDialog::cancelDownload, [=]() {
             m_updater.cancel();
@@ -109,4 +109,14 @@ void UpdaterUtils::updaterDownloadFinished()
     } else {
         QMessageBox::information(nullptr, tr("Installation canceled"), tr("Installation canceled !"));
     }
+}
+
+QDir UpdaterUtils::dir() const
+{
+    return m_dir;
+}
+
+void UpdaterUtils::setDir(const QDir &dir)
+{
+    m_dir = dir;
 }

@@ -22,10 +22,19 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 SettingsDialog::SettingsDialog(SettingsManager *settingsManager, BookmarkManager *bmManager, QWidget *parent) : QDialog(parent), m_settingsManager(settingsManager), m_bmManager(bmManager)
 {
     setWindowIcon(QIcon(":/icons/ic_help_outline_white_18dp"));
-    this->setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setMinimumWidth(350);
+
+    mw_scroll = new QScrollArea(this);
+    mw_scroll->setWidgetResizable(true);
+
+    mw_widget = new QWidget(mw_scroll);
+
+    m_layoutScroll = new QVBoxLayout;
+    m_layoutScroll->setMargin(0);
 
     m_mainLayout = new QVBoxLayout;
-    m_mainLayout->setSizeConstraint(QLayout::SetFixedSize);
+    //m_mainLayout->setSizeConstraint(QLayout::SetFixedSize);
     m_mainLayout->setMargin(0);
 
     m_layout = new QVBoxLayout;
@@ -133,9 +142,15 @@ SettingsDialog::SettingsDialog(SettingsManager *settingsManager, BookmarkManager
     showAppInfos();
 
     m_mainLayout->addLayout(m_layout);
-    m_mainLayout->addWidget(mw_statusBar);
 
-    setLayout(m_mainLayout);
+    mw_widget->setLayout(m_mainLayout);
+
+    mw_scroll->setWidget(mw_widget);
+
+    m_layoutScroll->addWidget(mw_scroll);
+    m_layoutScroll->addWidget(mw_statusBar);
+
+    setLayout(m_layoutScroll);
 
     initUISettings();
 

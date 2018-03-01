@@ -28,6 +28,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QStatusBar>
+#include <QScrollArea>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -71,6 +72,11 @@ public slots:
     void importBookmarks();
 
 private:
+    QVBoxLayout *m_layoutScroll;
+
+    QWidget *mw_widget;
+    QScrollArea *mw_scroll;
+
     QVBoxLayout *m_mainLayout;
     QVBoxLayout *m_layout;
     QVBoxLayout *m_reinterpretLayout;

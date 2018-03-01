@@ -165,18 +165,18 @@
 <context>
     <name>DownloadDialog</name>
     <message>
-        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="26"/>
-        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="31"/>
+        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="27"/>
+        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="32"/>
         <source>Downloading file...</source>
         <translation>Téléchargement du fichier...</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="39"/>
+        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="40"/>
         <source>Hide</source>
         <translation>Cacher</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="43"/>
+        <location filename="../Sources/UI/DownloadDialog/downloaddialog.cpp" line="44"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -214,12 +214,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="89"/>
+        <location filename="../Sources/mainwindow.cpp" line="91"/>
         <source>All clipboards</source>
         <translation>Toutes les données copiées</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="90"/>
+        <location filename="../Sources/mainwindow.cpp" line="92"/>
         <source>Favorites</source>
         <translation>Favoris</translation>
     </message>
@@ -268,17 +268,17 @@
         <translation type="vanished">MiniClipBoard va être fermé pour terminer l&apos;installation.</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="341"/>
+        <location filename="../Sources/mainwindow.cpp" line="343"/>
         <source>MiniClipBoard</source>
         <translation>MiniClipBoard</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="343"/>
+        <location filename="../Sources/mainwindow.cpp" line="345"/>
         <source>MiniClipBoard - 1 new</source>
         <translation>MiniClipBoard - 1 nouveau</translation>
     </message>
     <message>
-        <location filename="../Sources/mainwindow.cpp" line="345"/>
+        <location filename="../Sources/mainwindow.cpp" line="347"/>
         <source>MiniClipBoard - %1 news</source>
         <translation>MiniClipBoard - %1 nouveaux</translation>
     </message>
@@ -363,113 +363,113 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="34"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="43"/>
         <source>Reinterpret data</source>
         <translation>Réinterprétation des données</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="38"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="47"/>
         <source>Reinterpret text as URL</source>
         <translation>Réinterpréter le texte en URL</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="39"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="48"/>
         <source>Reinterpret text as color</source>
         <translation>Réinterpréter le texte en couleur</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="44"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="53"/>
         <source>Notify each time there is a new copy</source>
         <translation>Notifier à chaque nouvelle copie</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="46"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="55"/>
         <source>Show thumbnails</source>
         <translation>Afficher les miniatures</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="48"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="57"/>
         <source>Window always on top</source>
         <translation>Toujours afficher la fenêtre au premier plan</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="50"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="59"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="62"/>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="64"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="71"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="73"/>
         <source>About languages...</source>
         <translation>A propos des langues...</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="64"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="73"/>
         <source>By choosing &quot;AUTO&quot; language, the system language will be used if available.&lt;br&gt;English is the default language and can&apos;t be removed.&lt;br&gt;Once you set the right language, you will need to restart the app.</source>
         <translation>En choisissant &quot;AUTO&quot;, la langue système sera utilisée si disponible.&lt;br&gt;L&apos;anglais est la langue par défaut et ne peut pas être supprimée.&lt;br&gt;Une fois que la langue a été sélectionnée, vous devez redémarrer le logiciel.</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="72"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="81"/>
         <source>Bookmarks</source>
         <translation>Favoris</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="75"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="84"/>
         <source>Export bookmarks</source>
         <translation>Exporter les favoris</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="76"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="85"/>
         <source>Import bookmarks</source>
         <translation>Importer les favoris</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="84"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="93"/>
         <source>Bookmarks directory :</source>
         <translation>Dossier des favoris :</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="89"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="98"/>
         <source>Updates</source>
         <translation>Mises à jour</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="92"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="101"/>
         <source>Auto check updates</source>
         <translation>Vérifier les mises à jour automatiquement</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="94"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="103"/>
         <source>Check for updates</source>
         <translation>Vérifier les mises à jour</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="102"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="111"/>
         <source>Legal informations</source>
         <translation>Informations légales</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="106"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="115"/>
         <source>About MiniClipBoard...</source>
         <translation>A propos de MiniClipBoard...</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="112"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="121"/>
         <source>Credits</source>
         <translation>Crédits</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="197"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="212"/>
         <source>MiniClipBoard V%1 %2</source>
         <translation>MiniClipBoard V%1 %2</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="227"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="242"/>
         <source>Export to ... - Select directory</source>
         <translation>Exporter vers ... - Sélectionner un dossier</translation>
     </message>
     <message>
-        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="237"/>
+        <location filename="../Sources/UI/Settings/settingsdialog.cpp" line="252"/>
         <source>Import from ... - Select directory</source>
         <translation>Importer vers ... - Sélectionner un dossier</translation>
     </message>
@@ -531,12 +531,12 @@
     <message>
         <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="46"/>
         <source>A new version of MiniClipBoard is available.&lt;br&gt;New version : &lt;i&gt;%1&lt;/i&gt; | Current version : &lt;i&gt;%2&lt;/i&gt;&lt;br&gt;Do you want to download and install it?</source>
-        <translation>Une nouvelle version de MiniClipBoard est disponible. &lt;br&gt;Nouvelle version: &lt;i&gt;%1&lt;/i&gt; | Version actuelle : &lt;i&gt;%2&lt;/i&gt;Voulez-vous la télécharger et l&apos;installer maintenant?</translation>
+        <translation type="unfinished">Une nouvelle version de MiniClipBoard est disponible. &lt;br&gt;Nouvelle version: &lt;i&gt;%1&lt;/i&gt; | Version actuelle : &lt;i&gt;%2&lt;/i&gt;&lt;br&gt;Voulez-vous la télécharger et l&apos;installer maintenant?</translation>
     </message>
     <message>
         <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="53"/>
-        <source>Connecting to &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</source>
-        <translation></translation>
+        <source>Connecting to &lt;a style=&quot;color: #93CEFF;&quot; href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</source>
+        <translation>Connexion à &lt;a style=&quot;color: #93CEFF;&quot; href=&quot;%1&quot;&gt;%2&lt;/a&gt; ...</translation>
     </message>
     <message>
         <location filename="../Sources/Core/UpdaterUtils/updaterutils.cpp" line="59"/>

@@ -30,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
     mw_welcome = nullptr;
     mp_settingsManager = nullptr;
     m_bookmarksPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/bookmarks";
+    m_updaterUtils.setDir(QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    connect(&m_updaterUtils, SIGNAL(progress(int,int,bool)), this, SLOT(updateProgressUpdater(int,int,bool)));
 
     setWindowIcon(QIcon(":/images/ic_content_paste_white_48dp_2x"));
     setTrayIcon(QIcon(":/icons/ic_content_paste_white_18dp"));
@@ -62,7 +64,9 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
             applySettings();
         });
         connect(dialog, &SettingsDialog::checkForUpdates, [=]() {
+            dialog->setCursor(Qt::WaitCursor);
             m_updaterUtils.checkForUpdates();
+            dialog->setCursor(Qt::ArrowCursor);
         });
         connect(dialog, &SettingsDialog::finished, [=](int result) {
             Q_UNUSED(result)
@@ -72,8 +76,6 @@ MainWindow::MainWindow(QWidget *parent) : PopupWindow(parent)
 
         dialog->exec();
     });
-
-    connect(&m_updaterUtils, SIGNAL(progress(int,int,bool)), this, SLOT(updateProgressUpdater(int,int,bool)));
 
     initBookmarksDir();
 
