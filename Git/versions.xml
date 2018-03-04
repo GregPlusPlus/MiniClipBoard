@@ -2,6 +2,6 @@
 
 <versions>
 	<version version="1.0" releaseDate="13/01/2018" installer="https://raw.githubusercontent.com/GregPlusPlus/MiniClipBoard/master/Win_builds/setup_MiniClipBoard_v1.0_Winx86.exe" os="windows" >First version of MiniClipBoard</version>
-	<version version="1.1" releaseDate="03/02/2018" installer="https://raw.githubusercontent.com/GregPlusPlus/MiniClipBoard/master/Win_builds/setup_MiniClipBoard_v1.1_Winx86.exe" os="windows" >GUI improvements and new auto updater</version>
-	<version version="1.2" releaseDate="28/02/2018" installer="https://raw.githubusercontent.com/GregPlusPlus/MiniClipBoard/master/Win_builds/setup_MiniClipBoard_v1.2_Winx86.exe" os="windows" >GUI improvements and new bookmark features</version>
+	<version version="1.1" releaseDate="03/02/2018" installer="https://raw.githubusercontent.com/GregPlusPlus/MiniClipBoard/master/Win_builds/setup_MiniClipBoard_v1.1_Winx86.exe" os="windows" >GUI improvements and new auto updater - Note: You might need to run this program as Administrator to proceed update.</version>
+	<version version="1.2" releaseDate="28/02/2018" installer="https://raw.githubusercontent.com/GregPlusPlus/MiniClipBoard/master/Win_builds/setup_MiniClipBoard_v1.2_Winx86.exe" os="windows" >GUI improvements and new bookmark features - Note: You might need to run this program as Administrator to proceed update.</version>
 </versions>
