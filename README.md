@@ -5,7 +5,7 @@
 MiniClipBoard is a cross-platform, open-source and lightweight clipboard manager.
 
 It is very simple to use: just copy any data (image, text, HTML, URL, color) from any software and keep your data on hand!  
-MiniClipBoard also features bookmarks that allows you to save your data over time, and reuse it later.
+MiniClipBoard also features bookmarks that allow you to save your data over time, and reuse it later.
 
 ### Two download options are currently available:
 * [Windows x86 - ZIP](https://github.com/GregPlusPlus/MiniClipBoard/raw/master/Win_builds/release_Winx86_v1.2.zip)
