@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -26,6 +26,8 @@ QFrame *UtilsUI::createSeparator(QFrame::Shape shape)
     line->setFrameShadow(QFrame::Raised);
     line->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     line->setFixedHeight(2);
+    line->setStyleSheet("border-top: 2px ridge #2C333A;");
+
     return line;
 }
 

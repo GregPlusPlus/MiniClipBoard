@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -26,7 +26,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QList>
 
-#include "../../Core/core.h"
+#include "../../Core/Core/core.h"
 #include "../DataWidget/datawidget.h"
 
 namespace CoreUI
@@ -34,6 +34,7 @@ namespace CoreUI
     DataWidget *copyDataWidget(DataWidget *widget, QWidget *parent);
     AbstractListedWidget *getWidgetFromUUID(const QList<AbstractListedWidget *> &widgets, const QUuid &uuid);
     int filterDataWidgets(const Core::Filter &filter, QList<AbstractListedWidget *> widgets);
+    bool isParent(QObject *object, QObject *supposedParent);
 }
 
 #endif // COREUI_H

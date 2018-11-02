@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -51,23 +51,23 @@ QString Utils::infosText()
                                "This application is made in C++, based on <a href=\"www.qt.io\">Qt</a> %1.<br>" \
                                "For more informations, please visit the <a href=\"https://github.com/GregPlusPlus/MiniClipBoard\">official website</a>." \
                                "<hr>" \
-                               "Copyright © 2017 Grégoire BOST<br><br>" \
+                               "Copyright © 2017-2018 Grégoire BOST<br><br>" \
                                "%2" \
                                "</p>").arg(QT_VERSION_STR).arg(legalTextHTML());
 
     return text;
 }
 
-QString Utils::welcomeHTML()
+QString Utils::loadText(const QString &path)
 {
-    QFile file(":/html/welcome");
+    QFile file(path);
     file.open(QFile::ReadOnly);
 
-    QString html = file.readAll();
+    QString text = file.readAll();
 
     file.close();
 
-    return html.toUtf8();
+    return text.toUtf8();
 }
 
 QString Utils::appVersion()
@@ -89,27 +89,27 @@ QString Utils::getUserName()
 QString Utils::buildOS()
 {
 #if defined(Q_OS_ANDROID)
-return QLatin1String("android");
+    return QLatin1String("android");
 #elif defined(Q_OS_BLACKBERRY)
-return QLatin1String("blackberry");
+    return QLatin1String("blackberry");
 #elif defined(Q_OS_IOS)
-return QLatin1String("ios");
+    return QLatin1String("ios");
 #elif defined(Q_OS_MACOS)
-return QLatin1String("macos");
+    return QLatin1String("macos");
 #elif defined(Q_OS_TVOS)
-return QLatin1String("tvos");
+    return QLatin1String("tvos");
 #elif defined(Q_OS_WATCHOS)
-return QLatin1String("watchos");
+    return QLatin1String("watchos");
 #elif defined(Q_OS_WINCE)
-return QLatin1String("wince");
+    return QLatin1String("wince");
 #elif defined(Q_OS_WIN)
-return QLatin1String("windows");
+    return QLatin1String("windows");
 #elif defined(Q_OS_LINUX)
-return QLatin1String("linux");
+    return QLatin1String("linux");
 #elif defined(Q_OS_UNIX)
-return QLatin1String("unix");
+    return QLatin1String("unix");
 #else
-return QLatin1String("unknown");
+    return QLatin1String("unknown");
 #endif
 }
 
@@ -120,4 +120,9 @@ QString Utils::executableFileSuffix()
     }
 
     return "";
+}
+
+QString Utils::appDataPath()
+{
+    return  QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
 }

@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -35,6 +35,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 class AboutDialog : public QDialog
 {
     Q_OBJECT
+
 public:
     explicit AboutDialog(QWidget *parent = nullptr);
 
@@ -44,8 +45,8 @@ public slots:
 
 private:
     QGridLayout *m_layout;
-    QLabel *mw_text;
-    QLabel *mw_icon;
+    QLabel      *mw_text;
+    QLabel      *mw_icon;
 };
 
 #endif // ABOUTDIALOG_H

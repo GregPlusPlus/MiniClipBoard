@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -24,6 +24,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include <QString>
 #include <QFile>
 #include <QApplication>
+#include <QStandardPaths>
 
 #include "legal.h"
 #include "appinfos.h"
@@ -35,10 +36,11 @@ namespace Utils
     QString legalText();
     QString legalTextHTML();
     QString infosText();
-    QString welcomeHTML();
+    QString loadText(const QString &path);
     QString appVersion();
     QString buildOS();
     QString executableFileSuffix();
+    QString appDataPath();
 }
 
 #endif // UTILS_H

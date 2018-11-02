@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -51,7 +51,8 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDebug>
 
-#include "../../Core/core.h"
+#include "../../Core/Core/core.h"
+#include "../CoreUI/Widgets/flatactionbutton.h"
 #include "../ListWidget/abstractlistedwidget.h"
 #include "ThumbnailWidget/imagethumbnail.h"
 #include "ThumbnailWidget/colorthumbnailwidget.h"
@@ -86,6 +87,10 @@ public:
     bool showThumbnails() const;
     void setShowThumbnails(bool showThumbnails);
 
+    bool beingRemoved() const;
+
+    QString fullTitle() const;
+
 signals:
     void bookmarkChanged(bool bookmarked);
     void ignoreNextCopy();
@@ -103,32 +108,33 @@ public slots:
     void fadeIn();
     void fadeOut();
 
-private slots:
-    void fadeOutAnimationFinished();
-
 private:
-    QGridLayout *m_layout;
+    QGridLayout      *m_layout;
 
-    QLabel *mw_icon;
-    QWidget *mw_thumbnailWidget;
-    QLabel *mw_title;
-    QLabel *mw_infosLabel;
-    QPushButton *mw_bookmark;
-    QPushButton *mw_copy;
-    QPushButton *mw_remove;
-    QPushButton *mw_seeContent;
+    QLabel           *mw_icon;
+    QWidget          *mw_thumbnailWidget;
+    QLabel           *mw_title;
+    QLabel           *mw_infosLabel;
+    FlatActionButton *mw_bookmark;
+    FlatActionButton *mw_copy;
+    FlatActionButton *mw_remove;
+    QPushButton      *mw_seeContent;
 
     Core::ClipboardData m_data;
 
-    QString m_title;
-    QDateTime m_dateTime;
+    QString     m_title;
+    QString     m_fullTitle;
+    QDateTime   m_dateTime;
 
-    bool m_bookmarked;
-    bool m_showThumbnails;
+    bool m_bookmarked       = false;
+    bool m_showThumbnails   = true;
+    bool m_beingRemoved     = false;
+
+    int m_maxTitleLength    = 100;
 
 private:
     QString textFromURLs(const Core::Urls &urls);
-    bool isThereFileFromURLs(const Core::Urls &urls);
+    int filesFromURLs(const Core::Urls &urls);
 
     void setIcon(const QPixmap &pixmap);
     void displayInfos();

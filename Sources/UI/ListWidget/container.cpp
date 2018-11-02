@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -23,15 +23,15 @@ Container::Container(QWidget *parent) : QScrollArea(parent)
 {
     setWidgetResizable(true);
     setAutoFillBackground(true);
-    setAcceptDrops(true);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, [=](){
-        mw_widget->update();
-    });
-    connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateShadow()));
-    connect(this->horizontalScrollBar(), &QScrollBar::valueChanged, [=](){
-        mw_widget->update();
-    });
+//    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, [=](){
+//        mw_widget->update();
+//    });
+    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &Container::updateShadow);
+//    connect(this->horizontalScrollBar(), &QScrollBar::valueChanged, [=](){
+//        mw_widget->update();
+//    });
 
     mw_widget = new QWidget(this);
     mw_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -56,7 +56,7 @@ Container::Container(QWidget *parent) : QScrollArea(parent)
 
 void Container::addWidget(AbstractListedWidget *widget)
 {
-    connect(widget, SIGNAL(removed(AbstractListedWidget*)), this, SLOT(removeWidget(AbstractListedWidget*)));
+    connect(widget, &AbstractListedWidget::removed, this, &Container::removeWidget);
     m_widgets.append(widget);
     m_layout->insertWidget(0, widget);
 
@@ -65,9 +65,10 @@ void Container::addWidget(AbstractListedWidget *widget)
     widget->fadeIn();
 
     emit widgetAdded(widget);
+    emit widgetsCountChanged(widgets().count());
 }
 
-void Container::removeWidget(AbstractListedWidget *widget)
+AbstractListedWidget* Container::removeWidget(AbstractListedWidget *widget)
 {
     m_layout->removeWidget(widget);
 
@@ -76,9 +77,12 @@ void Container::removeWidget(AbstractListedWidget *widget)
             m_layout->removeWidget(widget);
             m_widgets.removeAt(i);
             emit widgetRemoved(widget);
-            return;
+            emit widgetsCountChanged(widgets().count());
+            return widget;
         }
     }
+
+    return nullptr;
 }
 
 void Container::clear()
@@ -87,6 +91,7 @@ void Container::clear()
         if(m_widgets.at(i)){
             m_layout->removeWidget(m_widgets.at(i));
             emit widgetRemoved(m_widgets.at(i));
+            emit widgetsCountChanged(widgets().count());
         }
     }
 

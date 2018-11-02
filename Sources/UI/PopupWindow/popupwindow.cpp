@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -22,35 +22,34 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 PopupWindow::PopupWindow(QWidget *parent)
     : QWidget(parent)
 {
-    mw_centralWidget = nullptr;
-    m_mousePressed = false;
-
-    m_drawProgress = false;
-    m_currentProgress = 0;
-    m_maxProgress = 0;
-
+    setAcceptDrops(true);
     qApp->setQuitOnLastWindowClosed(false);
     qApp->installEventFilter(this);
-    this->installEventFilter(this);
+    //    this->installEventFilter(this);
 
     setFixedSize(350, 500);
 
-    setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow);
+    //    setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);
     setFocusPolicy(Qt::NoFocus);
     setMouseTracking(true);
-    setAcceptDrops(true);
 
     mw_tray = new Tray(this);
-    connect(mw_tray, SIGNAL(quit()), qApp, SLOT(quit()));
-    connect(mw_tray, SIGNAL(triggered()), this, SLOT(toggleWindow()));
+    connect(mw_tray, &Tray::quit, qApp, &QApplication::quit);
+    connect(mw_tray, &Tray::triggered, this, &PopupWindow::toggleWindow);
     connect(mw_tray, &Tray::resetSize, [=]() {
         updateSizePos(QSize(350, 500));
+    });
+    connect(mw_tray, &Tray::toggledAnchor, [=]() {
+        setAnchored(!m_anchored);
     });
 
     mw_tray->show();
 
-    connect(QApplication::desktop(), &QDesktopWidget::workAreaResized, [=]() {
+    //QScreen::availableGeometryChanged()
+
+    connect(QGuiApplication::screens().at(QApplication::desktop()->screenNumber(this)), &QScreen::availableGeometryChanged, [=]() {
         updateSizePos(size());
     });
 }
@@ -78,8 +77,12 @@ void PopupWindow::setTrayIcon(const QIcon &icon)
 
 void PopupWindow::notify()
 {
+    if(m_drawProgress) {
+        return;
+    }
+
     QPropertyAnimation *anim = new QPropertyAnimation(this, "notifyOpacity");
-    anim->setDuration(300);
+    anim->setDuration(400);
     anim->setStartValue(1);
     anim->setEndValue(0);
     anim->start();
@@ -102,15 +105,13 @@ void PopupWindow::setNotifyOpacity(float notifyOpacity)
     QPixmap pix = m_trayIcon.pixmap(pixSize);
 
     QPainter painter(&pix);
-    painter.setBrush(QColor(255, 255, 255, notifyOpacity * 150));
+    painter.setBrush(QColor(255, 255, 255, int(notifyOpacity * 150)));
     painter.setPen(Qt::NoPen);
     painter.setClipRegion(QRegion(m_iconMask));
 
     painter.drawRect(QRect(QPoint(0, 0), pixSize));
 
     mw_tray->setIcon(pix);
-
-    drawProgress();
 }
 
 QBitmap PopupWindow::iconMask() const
@@ -125,8 +126,19 @@ void PopupWindow::setIconMask(QBitmap iconMask)
 
 void PopupWindow::updateSizePos(const QSize &_size)
 {
-    QRect screenRect = QApplication::desktop()->screenGeometry();
-    QRect availRect = QApplication::desktop()->availableGeometry();
+    if(m_anchored) {
+        updateSizePosAnchored(_size);
+    } else {
+        updateSizePosFloating(_size);
+    }
+}
+
+void PopupWindow::updateSizePosAnchored(const QSize &_size)
+{
+    //QRect screenRect = QApplication::desktop()->screenGeometry();
+    //QRect availRect = QApplication::desktop()->availableGeometry();
+    QRect screenRect = QGuiApplication::screens().at(QApplication::desktop()->screenNumber(this))->geometry();
+    QRect availRect = QGuiApplication::screens().at(QApplication::desktop()->screenNumber(this))->availableGeometry();
 
     setFixedSize(_size);
 
@@ -148,12 +160,48 @@ void PopupWindow::updateSizePos(const QSize &_size)
     }
 }
 
+void PopupWindow::updateSizePosFloating(const QSize &_size)
+{
+    if(m_edge == Edge_Bottom|| m_edge == Edge_Right || m_edge == Edge_BottomRight) {
+        setFixedSize(_size);
+    } else if(m_edge == Edge_TopRight || m_edge == Edge_Top) {
+        move(pos() - QPoint(0, _size.height() - size().height()));
+        setFixedSize(_size);
+    } else if(m_edge == Edge_TopLeft) {
+        move(pos() - QPoint(_size.width() - size().width(), _size.height() - size().height()));
+        setFixedSize(_size);
+    } else if(m_edge == Edge_Left || m_edge == Edge_BottomLeft) {
+        move(pos() - QPoint(_size.width() - size().width(), 0));
+        setFixedSize(_size);
+    }
+}
+
 void PopupWindow::setTrayProgress(int current, int max)
 {
     m_currentProgress = current;
     m_maxProgress = max;
 
     drawProgress();
+}
+
+bool PopupWindow::getAnchored() const
+{
+    return m_anchored;
+}
+
+void PopupWindow::setAnchored(bool _anchored)
+{
+    m_anchored = _anchored;
+
+    m_side = Side_None;
+
+    updateSizePos(size());
+
+    if(!m_anchored) {
+        slideToCenter();
+    }
+
+    emit anchored(m_anchored);
 }
 
 bool PopupWindow::getDrawProgress() const
@@ -168,14 +216,9 @@ void PopupWindow::setDrawTrayProgress(bool _drawProgress)
     drawProgress();
 }
 
-QPoint PopupWindow::globalPosToLocalPos(const QPoint &mousePos)
-{
-    return mousePos - pos();
-}
-
 PopupWindow::WindowEdge PopupWindow::getEdgeFromMousePos(const QPoint &mousePos)
 {
-    QPoint localMousePos = globalPosToLocalPos(mousePos);
+    QPoint localMousePos = mapFromGlobal(mousePos);
 
     if(localMousePos.y() <= 5 && localMousePos.y() >= 0 &&
             localMousePos.x() <= 5 && localMousePos.x() >= 0) {
@@ -206,21 +249,23 @@ void PopupWindow::mouseMove(const QPoint &point)
 {
     if(!m_mousePressed) {
         m_edge = getEdgeFromMousePos(point);
-        if(m_edge == Edge_Top && (m_side == Side_Left || m_side == Side_Bottom || m_side == Side_Right)) {
+        if(m_edge == Edge_Top && (m_side == Side_Left || m_side == Side_Bottom || m_side == Side_Right || m_side == Side_None)) {
             setCursor(Qt::SizeVerCursor);
-        } else if(m_edge == Edge_TopLeft && (m_side == Side_Bottom || m_side == Side_Right)) {
+        } else if(m_edge == Edge_TopLeft && (m_side == Side_Bottom || m_side == Side_Right || m_side == Side_None)) {
             setCursor(Qt::SizeFDiagCursor);
-        } else if(m_edge == Edge_Left && (m_side == Side_Top || m_side == Side_Bottom || m_side == Side_Right)) {
+        } else if(m_edge == Edge_Left && (m_side == Side_Top || m_side == Side_Bottom || m_side == Side_Right || m_side == Side_None)) {
             setCursor(Qt::SizeHorCursor);
-        } else if(m_edge == Edge_BottomLeft && m_side == Side_Top) {
+        } else if(m_edge == Edge_BottomLeft && (m_side == Side_Top || m_side == Side_None)) {
             setCursor(Qt::SizeBDiagCursor);
-        } else if(m_edge == Edge_Bottom && m_side == Side_Top) {
+        } else if(m_edge == Edge_Bottom && (m_side == Side_Top || m_side == Side_None)) {
             setCursor(Qt::SizeVerCursor);
-        } else if(m_edge == Edge_BottomRight) {
+        } else if(m_edge == Edge_BottomRight && (m_side != Side_None)) {
             setCursor(Qt::ArrowCursor);
-        } else if(m_edge == Edge_Right && m_side == Side_Left) {
+        } else if(m_edge == Edge_BottomRight && (m_side == Side_None)) {
+            setCursor(Qt::SizeFDiagCursor);
+        } else if(m_edge == Edge_Right && (m_side == Side_Left || m_side == Side_None)) {
             setCursor(Qt::SizeHorCursor);
-        } else if(m_edge == Edge_TopRight && m_side == Side_Left) {
+        } else if(m_edge == Edge_TopRight && (m_side == Side_Left || m_side == Side_None)) {
             setCursor(Qt::SizeBDiagCursor);
         } else {
             setCursor(Qt::ArrowCursor);
@@ -247,7 +292,7 @@ void PopupWindow::mouseMove(const QPoint &point)
                 updateSizePos(_size);
             }
         }
-        break;
+            break;
         case Side_Right: {
             if(m_edge == Edge_Top) {
                 int dy = -(QCursor::pos().y() - m_mousePos.y());
@@ -268,7 +313,7 @@ void PopupWindow::mouseMove(const QPoint &point)
                 updateSizePos(_size);
             }
         }
-        break;
+            break;
         case Side_Top: {
             if(m_edge == Edge_Bottom) {
                 int dy = (QCursor::pos().y() - m_mousePos.y());
@@ -290,7 +335,7 @@ void PopupWindow::mouseMove(const QPoint &point)
                 updateSizePos(_size);
             }
         }
-        break;
+            break;
         case Side_Left: {
             if(m_edge == Edge_Top) {
                 int dy = -(QCursor::pos().y() - m_mousePos.y());
@@ -299,7 +344,7 @@ void PopupWindow::mouseMove(const QPoint &point)
                 updateSizePos(QSize(width(), height));
             } else if(m_edge == Edge_Right) {
                 int dx = -(QCursor::pos().x() - m_mousePos.x());
-                int width = m_originalSize.width() + dx;
+                int width = m_originalSize.width() - dx;
                 width = (width > 350)?width:350;
                 updateSizePos(QSize(width, height()));
             } else if(m_edge == Edge_TopRight) {
@@ -312,9 +357,63 @@ void PopupWindow::mouseMove(const QPoint &point)
                 updateSizePos(_size);
             }
         }
-        break;
-        default:
-        break;
+            break;
+        case Side_None: {
+            if(m_edge == Edge_Top) {
+                int dy = -(QCursor::pos().y() - m_mousePos.y());
+                int height = m_originalSize.height() + dy;
+                height = (height > 500)?height:500;
+                updateSizePos(QSize(width(), height));
+            } else if(m_edge == Edge_Right) {
+                int dx = -(QCursor::pos().x() - m_mousePos.x());
+                int width = m_originalSize.width() - dx;
+                width = (width > 350)?width:350;
+                updateSizePos(QSize(width, height()));
+            } else if(m_edge == Edge_TopRight) {
+                QPoint dp = QPoint(QCursor::pos() - m_mousePos);
+                dp.setX(-dp.x());
+                QSize d = QSize(0,0)-QSize(dp.x(), dp.y());
+                QSize _size = m_originalSize + d;
+                _size.setWidth((_size.width() > 350)?_size.width():350);
+                _size.setHeight((_size.height() > 500)?_size.height():500);
+                updateSizePos(_size);
+            } else if(m_edge == Edge_TopLeft) {
+                QPoint dp = QPoint(QCursor::pos() - m_mousePos);
+                QSize d = QSize(0,0)-QSize(dp.x(), dp.y());
+                QSize _size = m_originalSize + d;
+                _size.setWidth((_size.width() > 350)?_size.width():350);
+                _size.setHeight((_size.height() > 500)?_size.height():500);
+                updateSizePos(_size);
+            } else if(m_edge == Edge_Bottom) {
+                int dy = (QCursor::pos().y() - m_mousePos.y());
+                int height = m_originalSize.height() + dy;
+                height = (height > 500)?height:500;
+                updateSizePos(QSize(width(), height));
+            } else if(m_edge == Edge_Left) {
+                int dx = -(QCursor::pos().x() - m_mousePos.x());
+                int width = m_originalSize.width() + dx;
+                width = (width > 350)?width:350;
+                updateSizePos(QSize(width, height()));
+            } else if(m_edge == Edge_BottomLeft) {
+                QPoint dp = QPoint(QCursor::pos() - m_mousePos);
+                dp.setX(-dp.x());
+                QSize d = QSize(dp.x(), dp.y());
+                QSize _size = m_originalSize + d;
+                _size.setWidth((_size.width() > 350)?_size.width():350);
+                _size.setHeight((_size.height() > 500)?_size.height():500);
+                updateSizePos(_size);
+            } else if(m_edge == Edge_BottomRight) {
+                QPoint dp = QPoint(QCursor::pos() - m_mousePos);
+                dp.setX(-dp.x());
+                dp.setY(-dp.y());
+                QSize d = QSize(0,0)-QSize(dp.x(), dp.y());
+                QSize _size = m_originalSize + d;
+                _size.setWidth((_size.width() > 350)?_size.width():350);
+                _size.setHeight((_size.height() > 500)?_size.height():500);
+                updateSizePos(_size);
+            }
+        }
+            break;
         }
     }
 }
@@ -333,26 +432,47 @@ void PopupWindow::drawProgress()
 {
     QSize pixSize = m_trayIcon.availableSizes().at(0);
     QPixmap pix = m_trayIcon.pixmap(pixSize);
+    int thickness = int(0.08 * pixSize.height());
 
     if(m_drawProgress) {
         QPainter painter(&pix);
-        painter.setBrush(QColor(255, 255, 255));
-        painter.setPen(QPen(QColor(255, 255, 255, 0), 2));
+
+        painter.setBrush(QColor(0, 0, 0, 0));
+        painter.setPen(QPen(QColor(255, 255, 255), thickness));
+
         painter.setCompositionMode(QPainter::CompositionMode_Source);
         painter.setRenderHint(QPainter::HighQualityAntialiasing);
 
-        int w = (float)((float)m_currentProgress / (float)m_maxProgress) * (pixSize.width() - 6);
-        int h = 8;
+        int w = int(float(float(m_currentProgress) / float(m_maxProgress)) * float(pixSize.width() - (thickness * 4)));
+        int h = pixSize.height() / 3;
 
-        painter.drawRoundedRect(QRect(QPoint(0, (pixSize.height() / 2) - (h / 2)), QSize(pixSize.width(), h)), 4, 4);
+        painter.drawRoundedRect(QRect(QPoint(thickness, (pixSize.height() / 2) - (h / 2)), QSize(pixSize.width() - (thickness * 2), h)),
+                                h / 2, h / 2);
 
-        h = 4;
+        painter.setBrush(QColor(255, 255, 255));
+        painter.setPen(QPen(QColor(0, 0, 0, 0), thickness));
 
-        painter.setPen(QPen(QColor(255, 255, 255, 0), 1.5));
-        painter.drawRoundedRect(QRect(QPoint(3, (pixSize.height() / 2) - (h / 2)), QSize(w, h)), 4, 4);
+        h = h - (thickness * 2);
+
+        painter.drawRoundedRect(QRect(thickness * 2, (pixSize.height() / 2) - (h / 2), w, h), h / 2, h / 2);
+
     }
 
     mw_tray->setIcon(pix);
+}
+
+void PopupWindow::slideToCenter()
+{
+    QRect screenRect = QGuiApplication::screens().at(QApplication::desktop()->screenNumber(this))->geometry();
+
+    QPoint vect = pos() - QPoint((screenRect.width() / 2), (screenRect.height() / 2));
+
+    move(pos() - (vect / 10));
+}
+
+Tray *PopupWindow::tray() const
+{
+    return mw_tray;
 }
 
 QWidget *PopupWindow::centralWidget() const
@@ -375,12 +495,12 @@ void PopupWindow::paintEvent(QPaintEvent *event)
     painter.setBrush(QColor("#313D4A"));
     painter.setPen(QPen(QColor("#19232D"), 1.2));
 
-    QRect rect(0, 0, width(), height());
+    QRect rect(1, 1, width() - 2, height() - 2);
 
     painter.drawRoundedRect(rect, 5.5, 5.5);
 
     if(mw_centralWidget) {
-        mw_centralWidget->setGeometry(0, 0, width(), height());
+        mw_centralWidget->setGeometry(1, 1, width() - 2, height() - 2);
         updateMask();
     }
 }
@@ -402,7 +522,7 @@ bool PopupWindow::eventFilter(QObject *obj, QEvent *event)
 
 void PopupWindow::updateMask()
 {
-    QBitmap mask(width(), height());
+    QBitmap mask(size());
     mask.clear();
 
     QPainter painter(&mask);

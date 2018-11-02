@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -25,12 +25,14 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPropertyAnimation>
 
 #include <QPainter>
-#include <Qpen>
+#include <QPen>
 #include <QBrush>
 
 #include <QPaintEvent>
 
 #include <QDebug>
+
+// FIXME - Bad hover effect when holding click
 
 class TabButton : public QPushButton
 {
@@ -58,12 +60,12 @@ public slots:
     void setIconHighlighted(const QIcon &icon);
 
 private:
-    int m_index;
+    int m_index = 0;
 
     bool m_selected;
-    bool m_mousePress;
+    bool m_mousePress = false;
 
-    int m_fade;
+    int m_fade = 0;
 
     QIcon m_normalIcon;
     QIcon m_highlightedIcon;

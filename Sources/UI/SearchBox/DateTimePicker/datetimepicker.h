@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -27,12 +27,13 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QGridLayout>
 
-#include "../../../Core/core.h"
+#include "../../../Core/Core/core.h"
 #include "../../../Utils/utils.h"
 
 class DateTimePicker : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit DateTimePicker(QWidget *parent = nullptr);
     Core::DateTimeFilter getDateTimeFilter();
@@ -44,9 +45,9 @@ public slots:
     void updateDateTimeFilter();
 
 private:
-    QGridLayout *m_layout;
+    QGridLayout   *m_layout;
 
-    QComboBox *mw_mode;
+    QComboBox     *mw_mode;
 
     QDateTimeEdit *mw_dt_1;
     QDateTimeEdit *mw_dt_2;

@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -44,6 +44,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 class Container : public QScrollArea
 {
     Q_OBJECT
+
 public:
     explicit Container(QWidget *parent = nullptr);
 
@@ -52,18 +53,19 @@ public:
 signals:
     void widgetAdded(QWidget *widget);
     void widgetRemoved(QWidget *widget);
+    void widgetsCountChanged(int count);
 
 public slots:
     void addWidget(AbstractListedWidget *widget);
-    void removeWidget(AbstractListedWidget *widget);
+    AbstractListedWidget *removeWidget(AbstractListedWidget *widget);
     void clear();
     void updateShadow();
 
 private:
     QVBoxLayout *m_layout;
 
-    QWidget *mw_widget;
-    QWidget *mw_shadow;
+    QWidget     *mw_widget;
+    QWidget     *mw_shadow;
 
     QSpacerItem *m_spacer;
 

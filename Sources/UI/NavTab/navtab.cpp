@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -21,8 +21,6 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 NavTab::NavTab(QWidget *parent) : QWidget(parent)
 {
-    setAcceptDrops(true);
-
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setSpacing(0);
     m_mainLayout->setMargin(0);
@@ -56,7 +54,7 @@ TabButton *NavTab::addButton(const QIcon &normalIcon, const QIcon &highlightedIc
     button->setIconHighlighted(highlightedIcon);
     button->setFlat(true);
     button->setIndex(m_tabs.count());
-    connect(button, SIGNAL(buttonSelected(int)), this, SLOT(select(int)));
+    connect(button, &TabButton::buttonSelected, this, &NavTab::select);
 
     Tab tab(button, widget, m_tabs.count());
 

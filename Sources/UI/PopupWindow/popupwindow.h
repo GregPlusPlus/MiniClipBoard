@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -25,6 +25,8 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QWidget>
 #include <QDesktopWidget>
+
+#include <QScreen>
 
 #include <QVBoxLayout>
 
@@ -57,10 +59,10 @@ class PopupWindow : public QWidget
 
 public:
     enum WindowEdge{Edge_None, Edge_Left, Edge_Right, Edge_Top, Edge_Bottom, Edge_TopLeft, Edge_TopRight, Edge_BottomLeft, Edge_BottomRight};
-    enum Side{Side_Left, Side_Right, Side_Top, Side_Bottom};
+    enum Side{Side_Left, Side_Right, Side_Top, Side_Bottom, Side_None};
 
 public:
-    PopupWindow(QWidget *parent = 0);
+    PopupWindow(QWidget *parent = nullptr);
     ~PopupWindow();
 
     void setCentralWidget(QWidget *widget);
@@ -75,8 +77,14 @@ public:
 
     bool getDrawProgress() const;
 
+    Tray *tray() const;
+
+    bool getAnchored() const;
+    void setAnchored(bool _anchored);
+
 signals:
-    bool toggled(bool visible);
+    void toggled(bool visible);
+    void anchored(bool anchored);
 
 public slots:
     void toggleWindow();
@@ -87,7 +95,9 @@ public slots:
     void setTrayProgress(int current, int max);
 
 private:
-    QWidget *mw_centralWidget;
+    QWidget *mw_centralWidget = nullptr;
+
+    Tray    *mw_tray;
 
     QIcon m_trayIcon;
     QBitmap m_iconMask;
@@ -97,26 +107,27 @@ private:
     QPoint m_originalPos;
     QSize m_originalSize;
     int m_lastSize;
-    bool m_mousePressed;
+    bool m_mousePressed = false;
     WindowEdge m_edge;
 
     Side m_side;
 
     bool m_toggled;
 
-    int m_currentProgress;
-    int m_maxProgress;
-    bool m_drawProgress;
+    bool m_anchored = true;
+
+    int m_currentProgress   = 0;
+    int m_maxProgress       = 0;
+    bool m_drawProgress     = false;
 
 private:
-    QPoint globalPosToLocalPos(const QPoint &mousePos);
     WindowEdge getEdgeFromMousePos(const QPoint &mousePos);
+    void updateSizePosAnchored(const QSize &_size);
+    void updateSizePosFloating(const QSize &_size);
     void mouseMove(const QPoint &point);
     void mousePressed(const QPoint point);
     void drawProgress();
-
-protected:
-    Tray *mw_tray;
+    void slideToCenter();
 
 protected:
     void paintEvent(QPaintEvent *event);

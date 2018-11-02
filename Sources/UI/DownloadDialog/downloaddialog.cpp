@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -21,7 +21,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 DownloadDialog::DownloadDialog(QWidget *parent) : QDialog(parent)
 {
-    setWindowFlags(Qt::WindowTitleHint | Qt::SubWindow | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::WindowTitleHint | Qt::SubWindow/* | Qt::WindowStaysOnTopHint*/);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     setWindowTitle(tr("Downloading file..."));
@@ -34,21 +34,24 @@ DownloadDialog::DownloadDialog(QWidget *parent) : QDialog(parent)
     mw_message->setTextInteractionFlags(Qt::TextBrowserInteraction);
     mw_message->setOpenExternalLinks(true);
 
+    mw_rateTimeLabel = new QLabel(tr("--- KiB/s - Unknown remaining time"));
+
     mw_progress = new QProgressBar(this);
     mw_progress->setTextVisible(false);
 
     mw_hide = new QPushButton(tr("Hide"), this);
     mw_hide->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(mw_hide, SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(mw_hide, &QPushButton::clicked, this, &DownloadDialog::close);
 
     mw_cancel = new QPushButton(tr("Cancel"), this);
     mw_cancel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(mw_cancel, SIGNAL(clicked(bool)), this, SIGNAL(cancelDownload()));
+    connect(mw_cancel, &QPushButton::clicked, this, &DownloadDialog::cancelDownload);
 
-    m_layout->addWidget(mw_message, 0, 0, 1, 1);
-    m_layout->addWidget(mw_progress, 1, 0, 1, 4);
-    m_layout->addWidget(mw_hide, 2, 2, 1, 1);
-    m_layout->addWidget(mw_cancel, 2, 3, 1, 1);
+    m_layout->addWidget(mw_message,         0, 0, 1, 1);
+    m_layout->addWidget(mw_progress,        1, 0, 1, 4);
+    m_layout->addWidget(mw_rateTimeLabel,   2, 0, 1, 1);
+    m_layout->addWidget(mw_hide,            2, 2, 1, 1);
+    m_layout->addWidget(mw_cancel,          2, 3, 1, 1);
 
     setLayout(m_layout);
 }
@@ -57,6 +60,32 @@ void DownloadDialog::setProgress(qint64 received, qint64 total)
 {
     mw_progress->setMaximum(total);
     mw_progress->setValue(received);
+}
+
+void DownloadDialog::setRate(qint64 rate, qint64 remaining)
+{
+    if(rate == 0 || remaining == 0) {
+        mw_rateTimeLabel->setText(tr("--- KiB/s - Unknown remaining time"));
+
+        return;
+    }
+
+    qint64 time = remaining / rate;
+    QString str_time;
+
+    if(time >= 86400) {
+        str_time = tr("%1 Days %2 Hours").arg(time / 86400).arg((time % 86400) / 3600);
+    } else if(time >= 3600) {
+        str_time = tr("%1 Hours %2 Minutes").arg(time / 3600).arg((time % 3600) / 60);
+    } else if(time >= 60) {
+        str_time = tr("%1 Minutes %2 Seconds").arg(time / 60).arg(time % 60);
+    } else {
+        str_time = tr("%1 Seconds").arg(time);
+    }
+
+    mw_rateTimeLabel->setText(tr("%1 KiB/s - Remaining time : %2")
+                              .arg(rate / 1024)
+                              .arg(str_time));
 }
 
 void DownloadDialog::downloadFinished()

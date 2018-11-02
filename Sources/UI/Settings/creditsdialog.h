@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 This file is part of MiniClipBoard.
 MiniClipBoard is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -25,9 +25,12 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include <QIcon>
 #include <QFont>
 
+#include "../../Utils/utils.h"
+
 class CreditsDialog : public QDialog
 {
     Q_OBJECT
+
 public:
     explicit CreditsDialog(QWidget *parent = nullptr);
 
@@ -38,7 +41,7 @@ public slots:
 private:
     QGridLayout *m_layout;
 
-    QLabel *mw_text;
+    QLabel      *mw_text;
 };
 
 #endif // CREDITSDIALOG_H

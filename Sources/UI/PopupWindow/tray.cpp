@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -21,21 +21,24 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 Tray::Tray(QWidget *parent) : QSystemTrayIcon(parent)
 {
-    setIcon(QIcon(QPixmap(20, 20))); // Default icon
+    QPixmap nonePix(20, 20);
+    nonePix.fill(QColor(0, 0, 0, 0));
 
-    m_paused = false;
+    setIcon(QIcon(nonePix)); // Default icon
 
-    connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
+    connect(this, &Tray::activated, this, &Tray::trayActivated);
     mw_menu = new QMenu(parent);
 
-    m_pauseAction = mw_menu->addAction(QIcon(":/icons/ic_pause_circle_outline_white_18dp"), tr("&Pause"), this, SLOT(pause()));
-    m_clearClipboardAction = mw_menu->addAction(QIcon(":/icons/ic_remove_circle_outline_white_18dp"), tr("&Clear clipboard"), this, SIGNAL(clearClipboard()));
-    m_clearAction = mw_menu->addAction(QIcon(":/icons/ic_clear_white_18dp"), tr("&Clear"), this, SIGNAL(clear()));
+    m_pauseAction           = mw_menu->addAction(QIcon(":/icons/ic_pause_circle_outline_white_18dp"), tr("&Pause"),             this, &Tray::pause);
+    m_clearClipboardAction  = mw_menu->addAction(QIcon(":/icons/ic_remove_circle_outline_white_18dp"), tr("&Clear clipboard"),  this, &Tray::clearClipboard);
+    m_clearAction           = mw_menu->addAction(QIcon(":/icons/ic_clear_white_18dp"), tr("&Clear"),                            this, &Tray::clear);
+    m_moreOptionsAction     = mw_menu->addAction(QIcon(":/icons/ic_more_horiz_white_18dp"), tr("&More options"),                this, &Tray::moreOptions);
     mw_menu->addSeparator();
-    m_resetSizeAction = mw_menu->addAction(QIcon(":/icons/ic_crop_free_white_18dp"), tr("&Reset size"), this, SIGNAL(resetSize()));
+    m_resetSizeAction       = mw_menu->addAction(QIcon(":/icons/ic_fullscreen_exit_white_18dp"), tr("&Reset size"),             this, &Tray::resetSize);
+    m_anchorAction          = mw_menu->addAction(QIcon(":/icons/pin-off"), tr("&Floating"),                                     this, &Tray::toggleAnchor);
     mw_menu->addSeparator();
-    m_helpAction = mw_menu->addAction(QIcon(":/icons/ic_help_outline_white_18dp"), tr("&Help/Settings"), this, SIGNAL(help()));
-    m_quitAction = mw_menu->addAction(QIcon(":/icons/ic_exit_to_app_white_18dp"), tr("&Quit"), this, SIGNAL(quit()));
+    m_helpAction            = mw_menu->addAction(QIcon(":/icons/ic_help_outline_white_18dp"), tr("&Help/Settings"),             this, &Tray::help);
+    m_quitAction            = mw_menu->addAction(QIcon(":/icons/ic_exit_to_app_white_18dp"), tr("&Quit"),                       this, &Tray::quit);
 
     setContextMenu(mw_menu);
 }
@@ -62,6 +65,26 @@ void Tray::pause()
     }
 
     emit pauseToggled(m_paused);
+}
+
+void Tray::toggleAnchor()
+{
+    m_anchored = !m_anchored;
+
+    if(m_anchored) {
+        m_anchorAction->setIcon(QIcon(":/icons/pin-off"));
+        m_anchorAction->setText(tr("&Floating"));
+    } else {
+        m_anchorAction->setIcon(QIcon(":/icons/pin"));
+        m_anchorAction->setText(tr("&Anchored"));
+    }
+
+    emit toggledAnchor(m_anchored);
+}
+
+bool Tray::anchored() const
+{
+    return m_anchored;
 }
 
 bool Tray::paused() const

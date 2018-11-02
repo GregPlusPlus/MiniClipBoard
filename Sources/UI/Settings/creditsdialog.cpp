@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 This file is part of MiniClipBoard.
 MiniClipBoard is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -17,9 +17,10 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 CreditsDialog::CreditsDialog(QWidget *parent) : QDialog(parent)
 {
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     setWindowTitle(tr("Credits"));
     setWindowIcon(QIcon(":/icons/ic_info_white_18dp"));
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     m_layout = new QGridLayout;
     m_layout->setSizeConstraint(QLayout::SetFixedSize);
@@ -33,20 +34,7 @@ CreditsDialog::CreditsDialog(QWidget *parent) : QDialog(parent)
     font.setPointSize(9);
     mw_text->setFont(font);
 
-    mw_text->setText(tr("<style>" \
-                        "a{color: #3399ff;}" \
-                        "hr{" \
-                        "width: 100%;" \
-                        "border: 1px solid red;" \
-                        "height: 2px;" \
-                        "background-color: #839D2D;" \
-                        "}" \
-                        "</style>" \
-                        "<p>" \
-                        "Some icons comes from <a href=\"https://material.io/icons/\">https://material.io/icons/</a><br>" \
-                        "and are available under the Apache License Version 2.0.<hr>" \
-                        "All trademarks are property of their respective owners." \
-                        "</p>"));
+    mw_text->setText(Utils::loadText(":/html/credits"));
 
     m_layout->addWidget(mw_text, 0, 0, 1, 1);
 

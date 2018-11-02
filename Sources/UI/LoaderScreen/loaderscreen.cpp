@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -21,7 +21,17 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 LoaderScreen::LoaderScreen(QWidget *parent) : QWidget(parent)
 {
+    m_layout = new QVBoxLayout;
 
+    mw_text = new QLabel("Text", this);
+
+    m_layout->addStretch(10);
+    m_layout->addWidget(mw_text);
+    m_layout->addStretch(10);
+
+    m_layout->setAlignment(mw_text, Qt::AlignCenter);
+
+    setLayout(m_layout);
 }
 
 void LoaderScreen::reveal()
@@ -42,6 +52,8 @@ void LoaderScreen::reveal()
 
 void LoaderScreen::disappear()
 {
+    mw_text->setText("");
+
     QGraphicsOpacityEffect *opacity = new QGraphicsOpacityEffect(this);
     QPropertyAnimation *anim = new QPropertyAnimation(opacity, "opacity", this);
     connect(anim, &QPropertyAnimation::finished, [=]() {
@@ -57,6 +69,11 @@ void LoaderScreen::disappear()
     anim->start();
 }
 
+void LoaderScreen::setMessage(const QString &text)
+{
+    mw_text->setText(text);
+}
+
 void LoaderScreen::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
@@ -64,6 +81,7 @@ void LoaderScreen::paintEvent(QPaintEvent *event)
     QPainter painter(this);
 
     painter.setBrush(QColor(20, 20, 20, 200));
+    painter.setPen(Qt::NoPen);
 
-    painter.drawRect(0, 0, width(), height());
+    painter.drawRect(rect());
 }

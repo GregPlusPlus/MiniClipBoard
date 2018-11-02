@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -21,16 +21,10 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 DataWidget::DataWidget(QWidget *parent) : AbstractListedWidget(parent)
 {
-    //setStyleSheet("QWidget{border: 1px solid blue;}");
-
     m_data.type = Core::MimeType_None;
-    m_bookmarked = false;
-    m_showThumbnails = true;
-    //m_dateTime = QDateTime::currentDateTime();
 
     //setFixedHeight(70);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    setAcceptDrops(true);
 
     m_layout = new QGridLayout;
     m_layout->setContentsMargins(0, 10, 0, 0);
@@ -57,29 +51,14 @@ DataWidget::DataWidget(QWidget *parent) : AbstractListedWidget(parent)
     fontInfos.setPixelSize(10);
     mw_infosLabel->setFont(fontInfos);
 
-    mw_bookmark = new QPushButton(this);
-    mw_bookmark->setFlat(true);
-    mw_bookmark->setIcon(QIcon(":/icons/ic_bookmark_border_white_18dp"));
-    mw_bookmark->setCursor(Qt::PointingHandCursor);
-    mw_bookmark->setToolTip(tr("Bookmark"));
-    mw_bookmark->setFixedSize(18, 18);
-    connect(mw_bookmark, SIGNAL(clicked(bool)), this, SLOT(toggleBookMark()));
+    mw_bookmark = new FlatActionButton(QIcon(":/icons/ic_favorite_border_white_18dp"), tr("Bookmark"), this);
+    connect(mw_bookmark, &FlatActionButton::clicked, this, &DataWidget::toggleBookMark);
 
-    mw_copy = new QPushButton(this);
-    mw_copy->setFlat(true);
-    mw_copy->setIcon(QIcon(":/icons/ic_content_copy_white_18dp"));
-    mw_copy->setCursor(Qt::PointingHandCursor);
-    mw_copy->setToolTip(tr("Copy"));
-    mw_copy->setFixedSize(18, 18);
-    connect(mw_copy, SIGNAL(clicked(bool)), this, SLOT(copy()));
+    mw_copy = new FlatActionButton(QIcon(":/icons/ic_content_copy_white_18dp"), tr("Copy"), this);
+    connect(mw_copy, &FlatActionButton::clicked, this, &DataWidget::copy);
 
-    mw_remove = new QPushButton(this);
-    mw_remove->setFlat(true);
-    mw_remove->setIcon(QIcon(":/icons/ic_remove_circle_white_18dp"));
-    mw_remove->setCursor(Qt::PointingHandCursor);
-    mw_remove->setToolTip(tr("Remove from list"));
-    mw_remove->setFixedSize(18, 18);
-    connect(mw_remove, SIGNAL(clicked(bool)), this, SLOT(removeWidget()));
+    mw_remove = new FlatActionButton(QIcon(":/icons/ic_remove_circle_white_18dp"), tr("Remove from list"), this);
+    connect(mw_remove, &FlatActionButton::clicked, this, &DataWidget::removeWidget);
 
     mw_seeContent = new QPushButton(this);
     mw_seeContent->setFlat(true);
@@ -91,14 +70,14 @@ DataWidget::DataWidget(QWidget *parent) : AbstractListedWidget(parent)
         emit seeContent(this);
     });
 
-    m_layout->addWidget(mw_icon, 0, 0, 2, 2);
-    m_layout->addWidget(mw_thumbnailWidget, 0, 2, 2, 2);
-    m_layout->addWidget(mw_title, 0, 4, 1, 4);
-    m_layout->addWidget(mw_infosLabel, 1, 4, 1, 1);
-    m_layout->addWidget(mw_bookmark, 1, 5, 1, 1);
-    m_layout->addWidget(mw_copy, 1, 6, 1, 1);
-    m_layout->addWidget(mw_remove, 1, 7, 1, 1);
-    m_layout->addWidget(mw_seeContent, 0, 8, 2, 1);
+    m_layout->addWidget(mw_icon,                    0, 0, 2, 2);
+    m_layout->addWidget(mw_thumbnailWidget,         0, 2, 2, 2);
+    m_layout->addWidget(mw_title,                   0, 4, 1, 4);
+    m_layout->addWidget(mw_infosLabel,              1, 4, 1, 1);
+    m_layout->addWidget(mw_bookmark,                1, 5, 1, 1);
+    m_layout->addWidget(mw_copy,                    1, 6, 1, 1);
+    m_layout->addWidget(mw_remove,                  1, 7, 1, 1);
+    m_layout->addWidget(mw_seeContent,              0, 8, 2, 1);
     m_layout->addWidget(UtilsUI::createSeparator(), 2, 0, 1, 8);
 
     setLayout(m_layout);
@@ -118,7 +97,8 @@ void DataWidget::setDataColor(const QColor &color)
 
     QString title = tr("r: %1, g: %2, b: %3, a: %4").arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
 
-    m_title = title;
+    m_title     = title;
+    m_fullTitle = title;
     mw_title->setText(title);
 
     delete mw_thumbnailWidget;
@@ -139,9 +119,10 @@ void DataWidget::setDataHTML(const QString &html)
     QTextDocument doc;
     doc.setHtml(html);
 
-    QString title = doc.toPlainText();
+    QString title = doc.toPlainText().replace("\n", " ");
 
-    m_title = title.replace("\n", " ");
+    m_title     = title.left(m_maxTitleLength);
+    m_fullTitle = title;
     mw_title->setText(elidedText(title, mw_title));
 
     displayInfos();
@@ -154,8 +135,11 @@ void DataWidget::setDataText(const QString &text)
 
     setIcon(QPixmap(":/icons/ic_text_fields_white_24dp"));
 
-    m_title = QString(text).remove("\n"),
-    mw_title->setText(elidedText(text, mw_title));
+    QString title = QString(text).remove("\n");
+
+    m_title     = title.left(m_maxTitleLength);
+    m_fullTitle = title;
+    mw_title->setText(elidedText(title, mw_title));
 
     displayInfos();
 }
@@ -169,7 +153,8 @@ void DataWidget::setDataImage(const QPixmap &image)
 
     QString title = tr("%1x%2 | Depth: %3").arg(image.width()).arg(image.height()).arg(image.depth());
 
-    m_title = title;
+    m_title     = title;
+    m_fullTitle = title;
     mw_title->setText(title);
 
     delete mw_thumbnailWidget;
@@ -185,15 +170,18 @@ void DataWidget::setDataUrls(const Core::Urls &urls)
     m_data.type = Core::MimeType_URLs;
     m_data.URLs = urls;
 
-    if(isThereFileFromURLs(urls)) {
+    if(filesFromURLs(urls) == 1) {
         setIcon(QPixmap(":/icons/ic_insert_drive_file_white_24dp"));
+    } else if(filesFromURLs(urls) > 1) {
+        setIcon(QPixmap(":/icons/ic_insert_drive_multiple_files_white_24dp"));
     } else {
         setIcon(QPixmap(":/icons/ic_link_white_24dp"));
     }
 
     QString title = textFromURLs(urls);
 
-    m_title = title;
+    m_title     = title;
+    m_fullTitle = title;
     mw_title->setText(elidedText(title, mw_title));
 
     displayInfos();
@@ -204,9 +192,11 @@ void DataWidget::toggleBookMark()
     m_bookmarked = !m_bookmarked;
 
     if(m_bookmarked) {
-        mw_bookmark->setIcon(QIcon(":/icons/ic_bookmark_white_18dp"));
+        //mw_bookmark->setIcon(QIcon(":/icons/ic_bookmark_white_18dp"));
+        mw_bookmark->setIcon(QIcon(":/icons/ic_favorite_white_18dp"));
     } else {
-        mw_bookmark->setIcon(QIcon(":/icons/ic_bookmark_border_white_18dp"));
+        //mw_bookmark->setIcon(QIcon(":/icons/ic_bookmark_border_white_18dp"));
+        mw_bookmark->setIcon(QIcon(":/icons/ic_favorite_border_white_18dp"));
     }
 
     emit bookmarkChanged(m_bookmarked);
@@ -214,6 +204,7 @@ void DataWidget::toggleBookMark()
 
 void DataWidget::removeWidget()
 {
+    m_beingRemoved = true;
     fadeOut();
 }
 
@@ -227,8 +218,12 @@ void DataWidget::copy()
     case Core::MimeType_Color:
         data->setColorData(QVariant(m_data.color));
         break;
-    case Core::MimeType_Html:
+    case Core::MimeType_Html: {
         data->setHtml(m_data.Html);
+        QTextDocument doc;
+        doc.setHtml(m_data.Html);
+        data->setText(doc.toPlainText());
+    }
         break;
     case Core::MimeType_Text:
         data->setText(m_data.text);
@@ -245,11 +240,6 @@ void DataWidget::copy()
     }
 
     QApplication::clipboard()->setMimeData(data);
-}
-
-void DataWidget::fadeOutAnimationFinished()
-{
-    emit removed(this);
 }
 
 bool DataWidget::showThumbnails() const
@@ -312,9 +302,11 @@ void DataWidget::setBookmarked(bool bookmarked)
     m_bookmarked = bookmarked;
 
     if(m_bookmarked) {
-        mw_bookmark->setIcon(QIcon(":/icons/ic_bookmark_white_18dp"));
+        //mw_bookmark->setIcon(QIcon(":/icons/ic_bookmark_white_18dp"));
+        mw_bookmark->setIcon(QIcon(":/icons/ic_favorite_white_18dp"));
     } else {
-        mw_bookmark->setIcon(QIcon(":/icons/ic_bookmark_border_white_18dp"));
+        //mw_bookmark->setIcon(QIcon(":/icons/ic_bookmark_border_white_18dp"));
+        mw_bookmark->setIcon(QIcon(":/icons/ic_favorite_border_white_18dp"));
     }
 
     emit bookmarkChanged(m_bookmarked);
@@ -359,33 +351,33 @@ QString DataWidget::textFromURLs(const Core::Urls &urls)
 {
     QString str_urls;
 
-    for(int i = 0; i < urls.count() ; i++) {
-        QString url = urls.at(i).toString();
+    for(QUrl _url : urls) {
+        QString url(_url.toString());
 
-        if(url.contains("file:///")) {
+        if(_url.isLocalFile()) {
             url.remove("file:///");
             str_urls += tr("File: ") + QFileInfo(url).fileName();
         } else {
             str_urls += url;
         }
 
-        if(i < urls.count() - 1) {
-            str_urls += " , ";
-        }
+        str_urls += " , ";
     }
 
-    return str_urls;
+    return str_urls.left(str_urls.length() - 3);
 }
 
-bool DataWidget::isThereFileFromURLs(const Core::Urls &urls)
+int DataWidget::filesFromURLs(const Core::Urls &urls)
 {
-    for(int i = 0; i < urls.count() ; i++) {
-        if(!urls.at(i).toString().contains("file:///")) {
-            return false;
+    int count = 0;
+
+    for(QUrl url : urls) {
+        if(url.toString().startsWith("file:///")) {
+            count++;
         }
     }
 
-    return true;
+    return count;
 }
 
 void DataWidget::setIcon(const QPixmap &pixmap)
@@ -436,7 +428,9 @@ void DataWidget::fadeOut()
 {
     QGraphicsOpacityEffect *opacity = new QGraphicsOpacityEffect(this);
     QPropertyAnimation *anim = new QPropertyAnimation(opacity, "opacity", this);
-    connect(anim, SIGNAL(finished()), this, SLOT(fadeOutAnimationFinished()));
+    connect(anim, &QPropertyAnimation::finished, [=]() {
+        emit removed(this);
+    });
 
     setGraphicsEffect(opacity);
 
@@ -452,4 +446,14 @@ void DataWidget::fadeOut()
     animSize->setEndValue(QSize(width(), 0));
     animSize->setEasingCurve(QEasingCurve::InOutBack);
     animSize->start();
+}
+
+QString DataWidget::fullTitle() const
+{
+    return m_fullTitle;
+}
+
+bool DataWidget::beingRemoved() const
+{
+    return m_beingRemoved;
 }

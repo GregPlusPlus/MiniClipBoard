@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -24,13 +24,14 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QCheckBox>
 
 #include <QMenu>
 #include <QWidgetAction>
 #include <QActionGroup>
 #include <QAction>
 
-#include <Qpainter>
+#include <QPainter>
 #include <QPen>
 #include <QBrush>
 
@@ -38,7 +39,8 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDebug>
 
-#include "../../Core/core.h"
+#include "../../Core/Core/core.h"
+#include "../CoreUI/Widgets/lineedit.h"
 #include "../../Utils/utils.h"
 #include "../UtilsUI/utilsui.h"
 #include "DateTimePicker/datetimepicker.h"
@@ -46,9 +48,13 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 class SearchBox : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit SearchBox(QWidget *parent = nullptr);
     Core::Filter getFilter();
+
+    int getTopCrop() const;
+    void setTopCrop(int topCrop);
 
 signals:
     void filterChanged(const Core::Filter &filter);
@@ -57,22 +63,26 @@ public slots:
     void setText(const QString &text);
 
 private:
-    QLineEdit *mw_search;
-    QPushButton *mw_clearButton;
-    QPushButton *mw_optionsButton;
-    QMenu *mw_menu;
-    QActionGroup *mw_group;
+    LineEdit        *mw_search;
+    QPushButton     *mw_clearButton;
+    QPushButton     *mw_optionsButton;
+    QMenu           *mw_menu;
+    QActionGroup    *mw_group;
 
-    QAction *m_filterAll;
-    QAction *m_filterImage;
-    QAction *m_filterColor;
-    QAction *m_filterHtml;
-    QAction *m_filterText;
-    QAction *m_filterURL;
+    QCheckBox       *mw_caseSensitive;
 
-    DateTimePicker *mw_dateTimePicker;
+    QAction         *m_filterAll;
+    QAction         *m_filterImage;
+    QAction         *m_filterColor;
+    QAction         *m_filterHtml;
+    QAction         *m_filterText;
+    QAction         *m_filterURL;
 
-    Core::MimeType m_filterType;
+    DateTimePicker  *mw_dateTimePicker;
+
+    Core::MimeType m_filterType = Core::MimeType_None;
+
+    int m_topCrop = 0;
 
 private:
     void buildMenu();

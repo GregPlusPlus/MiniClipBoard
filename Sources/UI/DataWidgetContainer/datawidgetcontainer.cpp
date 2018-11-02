@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -21,14 +21,12 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 DataWidgetContainer::DataWidgetContainer(QWidget *parent) : QWidget(parent)
 {
-    setAcceptDrops(true);
-
     m_layout = new QVBoxLayout;
     m_layout->setMargin(0);
     m_layout->setSpacing(0);
 
     mw_search = new SearchBox(this);
-    connect(mw_search, SIGNAL(filterChanged(Core::Filter)), this, SLOT(updateSearch(Core::Filter)));
+    connect(mw_search, &SearchBox::filterChanged, this, &DataWidgetContainer::updateSearch);
 
     mw_searchResult = new QLabel(this);
     mw_searchResult->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -39,12 +37,18 @@ DataWidgetContainer::DataWidgetContainer(QWidget *parent) : QWidget(parent)
                                    "background: #242D35;"
                                    "border-bottom: 1px solid #19232D;");
 
+    mw_header = new HeaderWidget(this);
+
     mw_container = new Container(this);
     connect(mw_container, &Container::widgetAdded, [=]() {
         updateSearch(mw_search->getFilter());
     });
+    connect(mw_container, &Container::widgetsCountChanged, [=](int count) {
+        mw_header->setVisible(!count);
+    });
 
     m_layout->addWidget(mw_search);
+    m_layout->addWidget(mw_header);
     m_layout->addWidget(mw_searchResult);
     m_layout->addWidget(mw_container);
 
@@ -66,6 +70,8 @@ void DataWidgetContainer::updateSearch(const Core::Filter &filter)
         mw_searchResult->setVisible(true);
     }
 
+    mw_searchResult->setText(tr("Searching..."));
+
     int count = CoreUI::filterDataWidgets(filter, mw_container->widgets());
 
     if(!count) {
@@ -75,4 +81,9 @@ void DataWidgetContainer::updateSearch(const Core::Filter &filter)
     } else {
         mw_searchResult->setText(tr("%1 results found.").arg(count));
     }
+}
+
+SearchBox *DataWidgetContainer::searchBox() const
+{
+    return mw_search;
 }

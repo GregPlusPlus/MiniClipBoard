@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -28,34 +28,43 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 class Tray : public QSystemTrayIcon
 {
     Q_OBJECT
+
 public:
     explicit Tray(QWidget *parent = nullptr);
 
     bool paused() const;
+
+    bool anchored() const;
 
 signals:
     void quit();
     void pauseToggled(bool paused);
     void clear();
     void clearClipboard();
+    void moreOptions();
     void triggered();
     void resetSize();
+    void toggledAnchor(bool anchored);
     void help();
 
 public slots:
     void trayActivated(QSystemTrayIcon::ActivationReason reason);
     void pause();
+    void toggleAnchor();
 
 private:
-    QMenu *mw_menu;
+    QMenu   *mw_menu;
     QAction *m_pauseAction;
     QAction *m_clearAction;
     QAction *m_clearClipboardAction;
+    QAction *m_moreOptionsAction;
+    QAction *m_anchorAction;
     QAction *m_resetSizeAction;
     QAction *m_helpAction;
     QAction *m_quitAction;
 
-    bool m_paused;
+    bool m_paused = false;
+    bool m_anchored = true;
 };
 
 #endif // TRAY_H

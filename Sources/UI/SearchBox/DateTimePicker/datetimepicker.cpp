@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -31,7 +31,7 @@ DateTimePicker::DateTimePicker(QWidget *parent) : QWidget(parent)
     mw_mode->addItem(tr("After"));
     mw_mode->addItem(tr("Between"));
     mw_mode->setCurrentIndex(0);
-    connect(mw_mode, SIGNAL(activated(int)), this, SLOT(updateMode(int)));
+    connect(mw_mode, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &DateTimePicker::updateMode);
 
     mw_dt_1 = new QDateTimeEdit(this);
     mw_dt_1->setAccelerated(true);
@@ -40,8 +40,8 @@ DateTimePicker::DateTimePicker(QWidget *parent) : QWidget(parent)
     mw_dt_2->setAccelerated(true);
     mw_dt_2->setDisplayFormat(tr("dd/MM/yyyy hh:mm:ss"));
 
-    connect(mw_dt_1, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(updateDateTimeFilter()));
-    connect(mw_dt_2, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(updateDateTimeFilter()));
+    connect(mw_dt_1, &QDateTimeEdit::dateTimeChanged, this, &DateTimePicker::updateDateTimeFilter);
+    connect(mw_dt_2, &QDateTimeEdit::dateTimeChanged, this, &DateTimePicker::updateDateTimeFilter);
 
     m_layout->addWidget(mw_mode);
     m_layout->addWidget(new QLabel(tr("From :")));

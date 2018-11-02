@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -26,7 +26,7 @@ WelcomeScreen::WelcomeScreen(QWidget *parent) : QWidget(parent)
     m_layout->setSpacing(0);
 
     mw_text = new QTextBrowser(this);
-    mw_text->setHtml(Utils::welcomeHTML());
+    mw_text->setHtml(Utils::loadText(":/html/welcome"));
     mw_text->setStyleSheet("QTextBrowser {"
                            "padding-left: 10px;"
                            "background-color: #212930;"
@@ -54,8 +54,8 @@ WelcomeScreen::WelcomeScreen(QWidget *parent) : QWidget(parent)
         fadeOut();
     });
 
-    m_layout->addWidget(mw_text, 0, 0, 10, 5);
-    m_layout->addWidget(mw_skip, 10, 4, 1, 1, Qt::AlignRight);
+    m_layout->addWidget(mw_text, 0,  0, 10, 5);
+    m_layout->addWidget(mw_skip, 10, 4, 1,  1, Qt::AlignRight);
 
     setLayout(m_layout);
 }
@@ -82,5 +82,5 @@ void WelcomeScreen::paintEvent(QPaintEvent *event)
 
     painter.setBrush(QColor("#313D4A"));
 
-    painter.drawRect(0, 0, width(), height());
+    painter.drawRect(rect());
 }

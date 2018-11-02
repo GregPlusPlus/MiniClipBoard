@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -70,7 +70,7 @@ void AbstractListedWidget::paintEvent(QPaintEvent *event)
     painter.setBrush(grad);
     painter.setPen(Qt::NoPen);
 
-    painter.drawRect(0, 0, width(), height());
+    painter.drawRect(rect());
 }
 
 void AbstractListedWidget::enterEvent(QEvent *event)

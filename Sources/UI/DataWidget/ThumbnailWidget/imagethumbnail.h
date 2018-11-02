@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -31,6 +31,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 class ImageThumbnail : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit ImageThumbnail(QPixmap *pix, QWidget *parent = nullptr);
 

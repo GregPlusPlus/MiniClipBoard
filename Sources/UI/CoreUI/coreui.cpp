@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -44,9 +44,9 @@ DataWidget *CoreUI::copyDataWidget(DataWidget *widget, QWidget *parent)
 
 AbstractListedWidget *CoreUI::getWidgetFromUUID(const QList<AbstractListedWidget *> &widgets, const QUuid &uuid)
 {
-    for(int i = 0; i < widgets.count() ; i++) {
-        if(uuid == widgets.at(i)->Uuid()) {
-            return widgets.at(i);
+    for(AbstractListedWidget *w : widgets) {
+        if(uuid == w->Uuid()) {
+            return w;
         }
     }
 
@@ -58,21 +58,21 @@ int CoreUI::filterDataWidgets(const Core::Filter &filter, QList<AbstractListedWi
     int count = 0;
 
     if(filter.text.isEmpty()) {
-        for(int i = 0; i < widgets.count(); i++) {
-            DataWidget *w = qobject_cast<DataWidget *>(widgets.at(i));
+        for(AbstractListedWidget *abstW : widgets) {
+            DataWidget *w = qobject_cast<DataWidget *>(abstW);
             w->setVisible(true);
         }
     }
 
-    for(int i = 0; i < widgets.count(); i++) {
-        DataWidget *w = qobject_cast<DataWidget *>(widgets.at(i));
+    for(AbstractListedWidget *abstW : widgets) {
+        DataWidget *w = qobject_cast<DataWidget *>(abstW);
 
-        if(w->title().toLower().contains(filter.text) &&
+        if(w->fullTitle().contains(filter.text, (Qt::CaseSensitivity)filter.caseSensitive) &&
                 (w->data().type == filter.type || filter.type == Core::MimeType_None) &&
                 ((filter.dateTimeFilter.type == Core::DateTimeFilterType_None) ||
-                (filter.dateTimeFilter.type == Core::DateTimeFilterType_Before && w->dateTime() <= filter.dateTimeFilter.dateTime_2) ||
-                (filter.dateTimeFilter.type == Core::DateTimeFilterType_After && w->dateTime() >= filter.dateTimeFilter.dateTime_1) ||
-                (filter.dateTimeFilter.type == Core::DateTimeFilterType_Between && w->dateTime() >= filter.dateTimeFilter.dateTime_1 && w->dateTime() <= filter.dateTimeFilter.dateTime_2))) {
+                 (filter.dateTimeFilter.type == Core::DateTimeFilterType_Before  && w->dateTime() <= filter.dateTimeFilter.dateTime_2) ||
+                 (filter.dateTimeFilter.type == Core::DateTimeFilterType_After   && w->dateTime() >= filter.dateTimeFilter.dateTime_1) ||
+                 (filter.dateTimeFilter.type == Core::DateTimeFilterType_Between && w->dateTime() >= filter.dateTimeFilter.dateTime_1 && w->dateTime() <= filter.dateTimeFilter.dateTime_2))) {
             w->setVisible(true);
             count ++;
         } else {
@@ -81,4 +81,21 @@ int CoreUI::filterDataWidgets(const Core::Filter &filter, QList<AbstractListedWi
     }
 
     return count;
+}
+
+bool CoreUI::isParent(QObject *object, QObject *supposedParent)
+{
+    if(!supposedParent && !object) {
+        return false;
+    }
+
+    while (object) {
+        if(object->parent() == supposedParent) {
+            return true;
+        }
+
+        object = object->parent();
+    }
+
+    return false;
 }

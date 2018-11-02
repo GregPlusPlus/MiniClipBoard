@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -19,10 +19,21 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "settingsdialog.h"
 
-SettingsDialog::SettingsDialog(SettingsManager *settingsManager, BookmarkManager *bmManager, QWidget *parent) : QDialog(parent), m_settingsManager(settingsManager), m_bmManager(bmManager)
+SettingsDialog::SettingsDialog(SettingsManager *settingsManager,
+                               BookmarkManager *bookmarkManager,
+                               HotKeysManager *hotKeysManager,
+                               const Plugins::Plugins &plugins,
+                               QWidget *parent)
+    : QDialog(parent),
+      m_settingsManager(settingsManager),
+      m_bookmarkManager(bookmarkManager),
+      m_hotKeysManager(hotKeysManager),
+      m_plugins(plugins)
 {
-    setWindowIcon(QIcon(":/icons/ic_help_outline_white_18dp"));
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    setWindowTitle(tr("MiniClipBoard settings"));
+    setWindowIcon(QIcon(":/icons/ic_help_outline_white_18dp"));
     setMinimumWidth(350);
 
     mw_scroll = new QScrollArea(this);
@@ -50,11 +61,27 @@ SettingsDialog::SettingsDialog(SettingsManager *settingsManager, BookmarkManager
     m_reinterpretLayout->addWidget(mw_reinterpretUrl);
     m_reinterpretLayout->addWidget(mw_reinterpretColor);
 
-    mw_notify = new QCheckBox(tr("Notify each time there is a new copy"), this);
+    mw_GUIGroup = new QGroupBox(tr("User interface"), this);
 
-    mw_showThumbnails = new QCheckBox(tr("Show thumbnails"), this);
+    m_GUILayout = new QVBoxLayout;
+    mw_GUIGroup->setLayout(m_GUILayout);
 
-    mw_alwaysOnTop = new QCheckBox(tr("Window always on top"), this);
+    mw_notify           = new QCheckBox(tr("Notify each time there is a new copy"), this);
+    mw_showThumbnails   = new QCheckBox(tr("Show thumbnails"), this);
+    mw_alwaysOnTop      = new QCheckBox(tr("Window always on top"), this);
+    mw_tooltipCopy      = new QCheckBox(tr("Display a tooltip window when data is copied"));
+
+    mw_hotKeysButton = new QPushButton(tr("Configure hotkeys"), this);
+    connect(mw_hotKeysButton, &QPushButton::clicked, [=]() {
+        HotKeysDialog dial(m_hotKeysManager);
+        dial.exec();
+    });
+
+    m_GUILayout->addWidget(mw_notify);
+    m_GUILayout->addWidget(mw_showThumbnails);
+    m_GUILayout->addWidget(mw_alwaysOnTop);
+    m_GUILayout->addWidget(mw_tooltipCopy);
+    m_GUILayout->addWidget(mw_hotKeysButton);
 
     mw_langGroup = new QGroupBox(tr("Language"), this);
     m_langLayout = new QHBoxLayout;
@@ -78,20 +105,48 @@ SettingsDialog::SettingsDialog(SettingsManager *settingsManager, BookmarkManager
     m_langLayout->addWidget(mw_lang);
     m_langLayout->addWidget(mw_infoLang);
 
+    m_cloudLayout = new QVBoxLayout;
+
+    mw_cloudGroup = new QGroupBox(tr("Cloud settings"), this);
+    mw_cloudGroup->setLayout(m_cloudLayout);
+
+    mw_cloudButton = new QPushButton(tr("Cloud credentials"), this);
+    connect(mw_cloudButton, &QPushButton::clicked, [=]() {
+        CloudCredentialsDialog dialog;
+        dialog.exec();
+    });
+
+    m_cloudLayout->addWidget(mw_cloudButton);
+
     mw_bookmarksGroup = new QGroupBox(tr("Bookmarks"), this);
     m_bookmarksLayout = new QVBoxLayout;
 
     mw_exportBookmarks = new QPushButton(tr("Export bookmarks"));
     mw_importBookmarks = new QPushButton(tr("Import bookmarks"));
-    mw_bmPath = new QLineEdit(m_bmManager->dir().absolutePath(), this);
+
+    m_bmDirLayout = new QHBoxLayout;
+
+    mw_bmPath = new QLineEdit(m_bookmarkManager->dir().absolutePath(), this);
     mw_bmPath->setReadOnly(true);
     mw_bmPath->setStyleSheet("border: none;"
                              "background: rgba(20, 20, 20, 120);");
 
+    mw_bmDirOpen = new QPushButton(QIcon(":/icons/arrow_link"), QString(), this);
+    mw_bmDirOpen->setToolTip(tr("Access to folder"));
+    mw_bmDirOpen->setFlat(true);
+    mw_bmDirOpen->setCursor(Qt::PointingHandCursor);
+    mw_bmDirOpen->setFixedSize(20, 20);
+    connect(mw_bmDirOpen, &QPushButton::clicked, [=]() {
+        QDesktopServices::openUrl(QUrl(m_bookmarkManager->dir().absolutePath()));
+    });
+
+    m_bmDirLayout->addWidget(mw_bmPath);
+    m_bmDirLayout->addWidget(mw_bmDirOpen);
+
     m_bookmarksLayout->addWidget(mw_exportBookmarks);
     m_bookmarksLayout->addWidget(mw_importBookmarks);
     m_bookmarksLayout->addWidget(new QLabel(tr("Bookmarks directory :"), this));
-    m_bookmarksLayout->addWidget(mw_bmPath);
+    m_bookmarksLayout->addLayout(m_bmDirLayout);
 
     mw_bookmarksGroup->setLayout(m_bookmarksLayout);
 
@@ -101,7 +156,6 @@ SettingsDialog::SettingsDialog(SettingsManager *settingsManager, BookmarkManager
     mw_autoUpdates = new QCheckBox(tr("Auto check updates"), this);
 
     mw_checkForUpdates = new QPushButton(tr("Check for updates"), this);
-    connect(mw_checkForUpdates, SIGNAL(clicked(bool)), this, SIGNAL(checkForUpdates()));
 
     m_updatesLayout->addWidget(mw_autoUpdates);
     m_updatesLayout->addWidget(mw_checkForUpdates);
@@ -128,11 +182,10 @@ SettingsDialog::SettingsDialog(SettingsManager *settingsManager, BookmarkManager
     m_legalInfoslayout->addWidget(mw_creditsButton);
 
     m_layout->addWidget(mw_reinterpretGroup);
-    m_layout->addWidget(mw_notify);
-    m_layout->addWidget(mw_showThumbnails);
-    m_layout->addWidget(mw_alwaysOnTop);
+    m_layout->addWidget(mw_GUIGroup);
     m_layout->addWidget(mw_langGroup);
     m_layout->addWidget(mw_bookmarksGroup);
+    m_layout->addWidget(mw_cloudGroup);
     m_layout->addWidget(mw_updatesGroup);
     m_layout->addWidget(UtilsUI::createSeparator());
     m_layout->addWidget(mw_legalInfosGroup);
@@ -154,15 +207,17 @@ SettingsDialog::SettingsDialog(SettingsManager *settingsManager, BookmarkManager
 
     initUISettings();
 
-    connect(mw_reinterpretUrl, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
-    connect(mw_reinterpretColor, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
-    connect(mw_notify, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
-    connect(mw_showThumbnails, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
-    connect(mw_alwaysOnTop, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
-    connect(mw_autoUpdates, SIGNAL(toggled(bool)), this, SLOT(settingsUIChanged()));
-    connect(mw_lang, SIGNAL(activated(QString)), this, SLOT(settingsUIChanged()));
-    connect(mw_exportBookmarks, SIGNAL(clicked(bool)), this, SLOT(exportBookmarks()));
-    connect(mw_importBookmarks, SIGNAL(clicked(bool)), this, SLOT(importBookmarks()));
+    connect(mw_reinterpretUrl,      &QCheckBox::toggled,        this, &SettingsDialog::settingsUIChanged);
+    connect(mw_reinterpretColor,    &QCheckBox::toggled,        this, &SettingsDialog::settingsUIChanged);
+    connect(mw_notify,              &QCheckBox::toggled,        this, &SettingsDialog::settingsUIChanged);
+    connect(mw_showThumbnails,      &QCheckBox::toggled,        this, &SettingsDialog::settingsUIChanged);
+    connect(mw_alwaysOnTop,         &QCheckBox::toggled,        this, &SettingsDialog::settingsUIChanged);
+    connect(mw_tooltipCopy,         &QCheckBox::toggled,        this, &SettingsDialog::settingsUIChanged);
+    connect(mw_autoUpdates,         &QCheckBox::toggled,        this, &SettingsDialog::settingsUIChanged);
+    connect(mw_checkForUpdates,     &QPushButton::clicked,      this, &SettingsDialog::checkForUpdates);
+    connect(mw_exportBookmarks,     &QPushButton::clicked,      this, &SettingsDialog::exportBookmarks);
+    connect(mw_importBookmarks,     &QPushButton::clicked,      this, &SettingsDialog::importBookmarks);
+    connect(mw_lang, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::activated), this, &SettingsDialog::settingsUIChanged);
 }
 
 void SettingsDialog::initUISettings()
@@ -175,10 +230,11 @@ void SettingsDialog::initUISettings()
         mw_reinterpretColor->setChecked(true);
     }
 
-    mw_notify->setChecked(m_settingsManager->settings()->notify);
-    mw_showThumbnails->setChecked(m_settingsManager->settings()->showThumbnails);
-    mw_alwaysOnTop->setChecked(m_settingsManager->settings()->windowAlwaysOnTop);
-    mw_autoUpdates->setChecked(m_settingsManager->settings()->autoCheckUpdates);
+    mw_notify->setChecked           (m_settingsManager->settings()->notify);
+    mw_showThumbnails->setChecked   (m_settingsManager->settings()->showThumbnails);
+    mw_alwaysOnTop->setChecked      (m_settingsManager->settings()->windowAlwaysOnTop);
+    mw_tooltipCopy->setChecked      (m_settingsManager->settings()->tooltipCopy);
+    mw_autoUpdates->setChecked      (m_settingsManager->settings()->autoCheckUpdates);
 
     mw_lang->addItems(SettingsManager::availableLanguages("Translations"));
     mw_lang->setCurrentText(m_settingsManager->settings()->lang);
@@ -196,10 +252,11 @@ void SettingsDialog::saveSettings()
         m_settingsManager->settings()->reinterpret |= Core::ReinterpretData_TextToColor;
     }
 
-    m_settingsManager->settings()->notify = mw_notify->isChecked();
-    m_settingsManager->settings()->showThumbnails = mw_showThumbnails->isChecked();
-    m_settingsManager->settings()->windowAlwaysOnTop = mw_alwaysOnTop->isChecked();
-    m_settingsManager->settings()->autoCheckUpdates = mw_autoUpdates->isChecked();
+    m_settingsManager->settings()->notify             = mw_notify->isChecked();
+    m_settingsManager->settings()->showThumbnails     = mw_showThumbnails->isChecked();
+    m_settingsManager->settings()->windowAlwaysOnTop  = mw_alwaysOnTop->isChecked();
+    m_settingsManager->settings()->tooltipCopy        = mw_tooltipCopy->isChecked();
+    m_settingsManager->settings()->autoCheckUpdates   = mw_autoUpdates->isChecked();
 
     m_settingsManager->settings()->lang = mw_lang->currentText();
 
@@ -212,6 +269,19 @@ void SettingsDialog::showAppInfos()
     label->setText(tr("MiniClipBoard V%1 %2").arg(Utils::appVersion()).arg(m_settingsManager->lang()));
     label->setStyleSheet("padding-right: 10px;");
 
+    mw_aboutPluginsButton = new FlatActionButton(QIcon(":/icons/ic_extension_white_18dp"), tr("Plugins infos"), this);
+    connect(mw_aboutPluginsButton, &FlatActionButton::clicked, [=]() {
+        PluginsInfoDialog dialog(m_plugins);
+        dialog.exec();
+    });
+
+    mw_workingDirButton = new FlatActionButton(QIcon(":/icons/ic_folder_open_white_18dp"), tr("Working directory"), this);
+    connect(mw_workingDirButton, &FlatActionButton::clicked, [=]() {
+        QDesktopServices::openUrl(QUrl(Utils::appDataPath()));
+    });
+
+    mw_statusBar->addWidget(mw_aboutPluginsButton);
+    mw_statusBar->addWidget(mw_workingDirButton);
     mw_statusBar->addPermanentWidget(label);
 }
 
@@ -241,18 +311,24 @@ void SettingsDialog::exportBookmarks()
 {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Export to ... - Select directory"),
                                                     QString(),
-                                                    QFileDialog::ShowDirsOnly
-                                                    | QFileDialog::DontResolveSymlinks);
+                                                    QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
-    m_bmManager->exportBookmarks(QDir(dir));
+    if(dir.isEmpty()) {
+        return;
+    }
+
+    m_bookmarkManager->exportBookmarks(QDir(dir));
 }
 
 void SettingsDialog::importBookmarks()
 {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Import from ... - Select directory"),
                                                     QString(),
-                                                    QFileDialog::ShowDirsOnly
-                                                    | QFileDialog::DontResolveSymlinks);
+                                                    QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 
-    m_bmManager->importBookmarks(QDir(dir));
+    if(dir.isEmpty()) {
+        return;
+    }
+
+    m_bookmarkManager->importBookmarks(QDir(dir));
 }

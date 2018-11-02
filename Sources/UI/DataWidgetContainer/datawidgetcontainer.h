@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -30,14 +30,18 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #include "../DataWidget/datawidget.h"
 #include "../ListWidget/container.h"
 #include "../SearchBox/searchbox.h"
+#include "headerwidget.h"
 
 class DataWidgetContainer : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit DataWidgetContainer(QWidget *parent = nullptr);
 
     Container *getContainer() const;
+
+    SearchBox *searchBox() const;
 
 signals:
 
@@ -45,12 +49,13 @@ public slots:
     void updateSearch(const Core::Filter &filter);
 
 private:
-    QVBoxLayout *m_layout;
+    QVBoxLayout  *m_layout;
 
-    QLabel *mw_searchResult;
+    QLabel       *mw_searchResult;
 
-    SearchBox *mw_search;
-    Container *mw_container;
+    SearchBox    *mw_search;
+    HeaderWidget *mw_header;
+    Container    *mw_container;
 };
 
 #endif // DATAWIDGETCONTAINER_H

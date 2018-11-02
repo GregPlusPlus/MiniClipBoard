@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -39,6 +39,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 class WelcomeScreen : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit WelcomeScreen(QWidget *parent = nullptr);
 
@@ -49,10 +50,10 @@ public slots:
     void fadeOut();
 
 private :
-    QGridLayout *m_layout;
+    QGridLayout  *m_layout;
 
     QTextBrowser *mw_text;
-    QPushButton *mw_skip;
+    QPushButton  *mw_skip;
 
 protected:
     void paintEvent(QPaintEvent *event);

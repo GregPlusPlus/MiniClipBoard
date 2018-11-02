@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -21,14 +21,9 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 TabButton::TabButton(QWidget *parent) : QPushButton(parent)
 {
-    m_index = 0;
-    m_fade = 0;
-    m_mousePress = false;
-
     setAttribute(Qt::WA_TranslucentBackground);
     setFixedHeight(50);
     setCursor(Qt::PointingHandCursor);
-    setAcceptDrops(true);
 
     connect(this, &QPushButton::clicked, [=]() {
         emit buttonSelected(m_index);
@@ -72,18 +67,22 @@ void TabButton::setIconHighlighted(const QIcon &icon)
 
 void TabButton::mousePressEvent(QMouseEvent *event)
 {
-    m_mousePress = true;
+    if(event->button() == Qt::LeftButton) {
+        m_mousePress = true;
 
-    fadeIn(50);
+        fadeIn(50);
+    }
 
     QPushButton::mousePressEvent(event);
 }
 
 void TabButton::mouseReleaseEvent(QMouseEvent *event)
 {
-    m_mousePress = false;
+    if(event->button() == Qt::LeftButton){
+        m_mousePress = false;
 
-    fadeIn(50); //Not a typo
+        fadeIn(50);
+    }
 
     QPushButton::mouseReleaseEvent(event);
 }
@@ -137,7 +136,7 @@ void TabButton::paintEvent(QPaintEvent *event)
 
     painter.setPen(Qt::NoPen);
 
-    painter.drawRect(0, 0, width(), height());
+    painter.drawRect(rect());
 
     QPixmap pixmap = icon().pixmap(icon().actualSize(QSize(32, 32)));
 

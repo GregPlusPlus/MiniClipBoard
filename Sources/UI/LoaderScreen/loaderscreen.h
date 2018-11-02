@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -21,6 +21,9 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #define LOADERSCREEN_H
 
 #include <QWidget>
+#include <QLabel>
+
+#include <QVBoxLayout>
 
 #include <QPaintEvent>
 #include <QPainter>
@@ -33,6 +36,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 class LoaderScreen : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit LoaderScreen(QWidget *parent = nullptr);
 
@@ -41,8 +45,12 @@ signals:
 public slots:
     void reveal();
     void disappear();
+    void setMessage(const QString &text);
 
 private :
+    QVBoxLayout *m_layout;
+
+    QLabel *mw_text;
 
 protected:
     void paintEvent(QPaintEvent *event);

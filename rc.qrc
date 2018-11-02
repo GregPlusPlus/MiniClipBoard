@@ -30,6 +30,36 @@
         <file alias="arrow_link">rc/icons/arrow_link.png</file>
         <file alias="ic_favorite_border_white_highlighted_24dp">rc/icons/ic_favorite_border_white_highlighted_24dp.png</file>
         <file alias="ic_content_paste_white_highlighted_24dp">rc/icons/ic_content_paste_white_highlighted_24dp.png</file>
+        <file alias="ic_more_horiz_white_18dp">rc/icons/ic_more_horiz_white_18dp.png</file>
+        <file alias="ic_favorite_white_18dp">rc/icons/ic_favorite_white_18dp.png</file>
+        <file alias="ic_favorite_border_white_18dp">rc/icons/ic_favorite_border_white_18dp.png</file>
+        <file alias="ic_fullscreen_exit_white_18dp">rc/icons/ic_fullscreen_exit_white_18dp.png</file>
+        <file alias="ic_print_white_18dp">rc/icons/ic_print_white_18dp.png</file>
+        <file alias="ic_folder_open_white_18dp">rc/icons/ic_folder_open_white_18dp.png</file>
+        <file alias="ic_language_white_18dp">rc/icons/ic_language_white_18dp.png</file>
+        <file alias="ic_arrow_back_white_18dp">rc/icons/ic_arrow_back_white_18dp.png</file>
+        <file alias="ic_arrow_forward_white_18dp">rc/icons/ic_arrow_forward_white_18dp.png</file>
+        <file alias="ic_open_in_new_white_18dp">rc/icons/ic_open_in_new_white_18dp.png</file>
+        <file alias="ic_refresh_white_18dp">rc/icons/ic_refresh_white_18dp.png</file>
+        <file alias="ic_search_white_24dp">rc/icons/ic_search_white_24dp.png</file>
+        <file alias="ic_arrow_downward_white_48dp">rc/icons/ic_arrow_downward_white_48dp.png</file>
+        <file alias="bucket_48dp">rc/icons/bucket_48dp.png</file>
+        <file alias="ic_visibility_white_18dp">rc/icons/ic_visibility_white_18dp.png</file>
+        <file alias="outline_insert_drive_file_white_18dp">rc/icons/outline_insert_drive_file_white_18dp.png</file>
+        <file alias="ic_broken_image_white_36dp">rc/icons/ic_broken_image_white_36dp.png</file>
+        <file alias="wind_18dp">rc/icons/wind_18dp.png</file>
+        <file alias="ic_cloud_upload_white_18dp">rc/icons/ic_cloud_upload_white_18dp.png</file>
+        <file alias="ic_send_white_18dp">rc/icons/ic_send_white_18dp.png</file>
+        <file alias="ic_check_white_18dp">rc/icons/ic_check_white_18dp.png</file>
+        <file alias="ic_insert_drive_multiple_files_white_24dp">rc/icons/ic_insert_drive_multiple_files_white_24dp.png</file>
+        <file alias="pin">rc/icons/pin.png</file>
+        <file alias="pin-off">rc/icons/pin-off.png</file>
+        <file alias="ic_play_arrow_white_24dp">rc/icons/ic_play_arrow_white_24dp.png</file>
+        <file alias="ic_volume_up_white_24dp">rc/icons/ic_volume_up_white_24dp.png</file>
+        <file alias="ic_pause_white_24dp">rc/icons/ic_pause_white_24dp.png</file>
+        <file alias="ic_volume_down_white_24dp">rc/icons/ic_volume_down_white_24dp.png</file>
+        <file alias="ic_volume_mute_white_24dp">rc/icons/ic_volume_mute_white_24dp.png</file>
+        <file alias="ic_extension_white_18dp">rc/icons/ic_extension_white_18dp.png</file>
     </qresource>
     <qresource prefix="/css">
         <file alias="app">rc/css/app.qss</file>
@@ -49,8 +79,13 @@
         <file alias="ic_content_paste_white_48dp">rc/images/ic_content_paste_white_48dp.png</file>
         <file alias="ic_content_paste_white_48dp_2x">rc/images/ic_content_paste_white_48dp_2x.png</file>
         <file alias="app_icon">rc/images/app_icon.png</file>
+        <file alias="ic_content_paste_white_48dp_2x_mask">rc/images/ic_content_paste_white_48dp_2x_mask.png</file>
     </qresource>
     <qresource prefix="/html">
         <file alias="welcome">rc/html/welcome.html</file>
+        <file alias="credits">rc/html/credits.html</file>
+    </qresource>
+    <qresource prefix="/animations">
+        <file alias="loading">rc/animations/loading.gif</file>
     </qresource>
 </RCC>

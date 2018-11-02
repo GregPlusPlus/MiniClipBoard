@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -19,13 +19,11 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "contentviewer.h"
 
-ContentViewer::ContentViewer(QWidget *parent) : QWidget(parent)
+ContentViewer::ContentViewer(const Plugins::Plugins &plugins, QWidget *parent)
+    : QWidget(parent), m_plugins(plugins)
 {
-    m_headerHeight = 69;
-
     setAttribute(Qt::WA_TranslucentBackground);
     setStyleSheet("QLabel{background-color: none;}");
-    setAcceptDrops(true);
 
     setFixedSize(parent->size());
     move(0, 0);
@@ -37,13 +35,13 @@ ContentViewer::ContentViewer(QWidget *parent) : QWidget(parent)
 
     m_headerLayout = new QGridLayout;
     m_headerLayout->setMargin(0);
-    m_headerLayout->setSpacing(0);
+    m_headerLayout->setSpacing(5);
 
     mw_quitButton = new QPushButton(QIcon(":/icons/arrow_next_big_left"), QString(), this);
     mw_quitButton->setFlat(true);
     mw_quitButton->setFixedSize(40, m_headerHeight);
     mw_quitButton->setCursor(Qt::PointingHandCursor);
-    mw_quitButton->setStyleSheet("QPushButton{background-color: none; border: none; padding-bottom: 1px;}"
+    mw_quitButton->setStyleSheet("QPushButton{background-color: none; border: none; padding-bottom: 1px; border-radius: 0px;}"
                                  "QPushButton:hover{background-color: rgba(255, 255, 255, .1);}"
                                  "QPushButton:pressed{background-color: rgba(0, 0, 0, .1);}");
     connect(mw_quitButton, &QPushButton::clicked, [=](){
@@ -64,26 +62,46 @@ ContentViewer::ContentViewer(QWidget *parent) : QWidget(parent)
     mw_infosLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     mw_infosLabel->setFixedHeight(m_headerHeight / 2);
 
-    mw_saveButton = new QPushButton(QIcon(":/icons/ic_save_white_18dp"), QString(), this);
+    mw_saveButton = new FlatActionButton(QIcon(":/icons/ic_save_white_18dp"), tr("Save data to file"), this);
     mw_saveButton->setFixedSize(20, 20);
-    mw_saveButton->setCursor(Qt::PointingHandCursor);
-    mw_saveButton->setFlat(true);
-    mw_saveButton->setToolTip(tr("Save data to file"));
-    connect(mw_saveButton, SIGNAL(clicked(bool)), this, SLOT(save()));
+    connect(mw_saveButton, &FlatActionButton::clicked, this, &ContentViewer::save);
+
+    mw_printButton = new FlatActionButton(QIcon(":/icons/ic_print_white_18dp"), tr("Print"), this);
+    mw_printButton->setFixedSize(20, 20);
+    connect(mw_printButton, &FlatActionButton::clicked, this, &ContentViewer::print);
+
+    mw_cloudButton = new FlatActionButton(QIcon(":/icons/ic_cloud_upload_white_18dp"), tr("Upload to cloud"), this);
+    mw_cloudButton->setFixedSize(20, 20);
+
+    mw_cloudPopup = new CloudPopup;
+    mw_cloudPopup->setAnchorWidget(mw_cloudButton);
+    connect(mw_cloudPopup, &CloudPopup::upload, [=](CloudTypes::CloudData &data) {
+        data.data = m_data;
+
+        emit upload(data);
+    });
+    connect(mw_cloudButton, &FlatActionButton::clicked, mw_cloudPopup, &CloudPopup::trigger);
 
     QFont fontInfos = mw_title->font();
     fontInfos.setItalic(true);
     fontInfos.setPixelSize(10);
     mw_infosLabel->setFont(fontInfos);
 
-    m_headerLayout->addWidget(mw_quitButton, 0, 0, 2, 1);
-    m_headerLayout->addWidget(mw_title, 0, 1, 1, 4);
-    m_headerLayout->addWidget(mw_saveButton, 1, 1, 1, 1);
-    m_headerLayout->addWidget(mw_infosLabel, 1, 2, 1, 3, Qt::AlignLeft);
+    m_headerLayout->addWidget(mw_quitButton,    0, 0, 2, 1);
+    m_headerLayout->addWidget(mw_title,         0, 1, 1, 6);
+    m_headerLayout->addWidget(mw_saveButton,    1, 1, 1, 1);
+    m_headerLayout->addWidget(mw_printButton,   1, 2, 1, 1);
+    m_headerLayout->addWidget(mw_cloudButton,   1, 3, 1, 1);
+    m_headerLayout->addWidget(mw_infosLabel,    1, 4, 1, 3, Qt::AlignLeft);
 
     mw_viewer = new QWidget(this);
 
     mw_header->setLayout(m_headerLayout);
+}
+
+ContentViewer::~ContentViewer()
+{
+    mw_cloudPopup->cleanDestroy();
 }
 
 Core::ClipboardData ContentViewer::data() const
@@ -124,76 +142,14 @@ void ContentViewer::setTitle(const QString &title)
 
 void ContentViewer::save()
 {
-    QString filter;
-    switch (m_data.type) {
-    case Core::MimeType_Text :
-        filter = tr("Plain text (*.txt)");
-        break;
-    case Core::MimeType_Html :
-        filter = tr("Hypertext Markup Language (*.html)");
-        break;
-    case Core::MimeType_Image :
-        filter = tr("Portable Network Graphics (*.png)");
-        break;
-    case Core::MimeType_URLs :
-        filter = tr("Plain text (*.txt)");
-        break;
-    case Core::MimeType_Color :
-        filter = tr("Plain text (*.txt)");
-        break;
-    default:
-        return;
-        break;
-    }
+    Core::saveData(m_data);
+}
 
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save to file"), QString(), filter);
+void ContentViewer::print()
+{
+    PrintManager mgr(&m_data);
 
-    if(!fileName.isEmpty()) {
-        switch (m_data.type) {
-        case Core::MimeType_Text :
-        {
-            QFile f(fileName);
-            if(f.open(QIODevice::WriteOnly)) {
-                f.write(m_data.text.toUtf8());
-            }
-        }
-            break;
-        case Core::MimeType_Html :
-        {
-            QFile f(fileName);
-            if(f.open(QIODevice::WriteOnly)) {
-                f.write(m_data.Html.toUtf8());
-            }
-        }
-            break;
-        case Core::MimeType_Image :
-        {m_data.image.save(fileName);}
-            break;
-        case Core::MimeType_URLs :
-        {
-            QFile f(fileName);
-            if(f.open(QIODevice::WriteOnly)) {
-                QString str;
-                for(int i = 0; i < m_data.URLs.count(); i++) {
-                    str.append(m_data.URLs.at(i).toString() + "\n\r");
-                }
-                f.write(str.toUtf8());
-            }
-        }
-            break;
-        case Core::MimeType_Color :
-        {
-            QFile f(fileName);
-            if(f.open(QIODevice::WriteOnly)) {
-                f.write(m_data.color.name().toUtf8());
-            }
-        }
-            break;
-        default:
-            return;
-            break;
-        }
-    }
+    mgr.print();
 }
 
 void ContentViewer::fadeIn()
@@ -233,7 +189,7 @@ void ContentViewer::setAnimationDuration(int animationDuration)
 QString ContentViewer::elidedText(const QString &text, QLabel *label)
 {
     QFontMetrics metrics(label->font());
-    return metrics.elidedText(text, Qt::ElideRight, label->width() - 30);
+    return metrics.elidedText(text, Qt::ElideMiddle, label->width() - 30);
 }
 
 void ContentViewer::applyMask()
@@ -276,7 +232,7 @@ void ContentViewer::displayData()
         mw_viewer = new ImageViewer(m_data.image, this);
         break;
     case Core::MimeType_URLs :
-        mw_viewer = new LinksViewer(m_data.URLs, this);
+        mw_viewer = new LinksViewer(m_data.URLs, m_plugins, this);
         break;
     case Core::MimeType_Color :
         mw_viewer = new ColorViewer(m_data.color, this);
@@ -301,7 +257,7 @@ void ContentViewer::paintEvent(QPaintEvent *event)
     QBrush bg(QColor("#313D4A"));
     painter.setBrush(bg);
 
-    painter.drawRect(0, 0, width(), height());
+    painter.drawRect(rect());
 
     bg.setColor(QColor("#282C34"));
     QPen border(QColor("#19232D"));

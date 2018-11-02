@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -20,6 +20,7 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef APPINFOS_H
 #define APPINFOS_H
 
-#define APP_VERSION "1.2"
+#define APP_VERSION "1.3"
+//#define APP_VERSION "000" // DEBUG ONLY
 
 #endif // APPINFOS_H

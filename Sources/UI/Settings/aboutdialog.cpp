@@ -1,5 +1,5 @@
 /************************ LICENSING & COPYRIGHT ***********************
-Copyright © 2017 Grégoire BOST
+Copyright © 2017-2018 Grégoire BOST
 
 This file is part of MiniClipBoard.
 
@@ -21,9 +21,10 @@ along with MiniClipBoard.  If not, see <http://www.gnu.org/licenses/>.
 
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent)
 {
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     setWindowTitle(tr("About MiniClipBoard..."));
     setWindowIcon(QIcon(":/icons/ic_info_white_18dp"));
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     m_layout = new QGridLayout;
     m_layout->setSizeConstraint(QLayout::SetFixedSize);
